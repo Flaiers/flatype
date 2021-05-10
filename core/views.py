@@ -1,4 +1,5 @@
 from .env import alphabet
+from datetime import date
 from .forms import ArticleForm
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -15,7 +16,8 @@ def create(request):
 
         if form.is_valid():
             article = form.save(commit=False)
-            article.slug = slugify(''.join(alphabet.get(w, w) for w in article.title.lower()))
+            date = article.date
+            article.slug = slugify(''.join(alphabet.get(w, w) for w in article.title.lower())) + date.strftime('-%m-%d')
             article.author = request.user
             article.save()
             return HttpResponse('Hello, World!')
