@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+  web:
+    build: .
+    container_name: flatype_web
+    image: flatype_image
+    command: bash -c "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 flatype.wsgi --reload"
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ".:/flatype"
+      - "/usr/web/flatype/static:/usr/web/static"
