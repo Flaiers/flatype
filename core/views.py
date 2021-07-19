@@ -1,16 +1,15 @@
 import environ
 from datetime import date
+from .models import Article
 from .forms import ArticleForm
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import requires_csrf_token
 
 
-def page_404(request):
-    return render(request, 'page_404.html')
-
-
+@login_required
 def create_new(request):
     if request.method == 'POST':
         env = environ.Env(
@@ -31,3 +30,31 @@ def create_new(request):
         form = ArticleForm()
 
     return render(request, 'create_new.html', {'form': form})
+
+
+@login_required
+def viewing(request):
+    article = Article.objects.get(name='')
+    return render(request, 'viewing.html', {'article': article})
+
+
+class Exceptions():
+
+    def __init__(self):
+        return
+
+    @requires_csrf_token
+    def page_not_found(self, request, exception):
+        return render(request, 'exceptions/404.html', status=404)
+
+    @requires_csrf_token
+    def server_error(self, request):
+        return render(request, 'exceptions/500.html', status=500)
+
+    @requires_csrf_token
+    def bad_request(self, request, exception):
+        return render(request, 'exceptions/400.html', status=400)
+
+    @requires_csrf_token
+    def permission_denied(self, request, exception):
+        return render(request, 'exceptions/403.html', status=403)

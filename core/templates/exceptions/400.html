@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}404 – {% endblock %}
+
+{% block content %}
+  <div class="tl_page_wrap">
+    <div class="tl_page">
+      <main class="tl_message">
+        <section>
+          <h1>400</h1>
+          Bad Request
+        </section>
+        <aside class="tl_message_buttons">
+          <a class="button create_button" href="{% url 'create_new' %}">Create new</a>
+        </aside>
+      </main>
+    </div>
+  </div>
+{% endblock %}
