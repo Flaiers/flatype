@@ -48,6 +48,7 @@ def viewing(request):
     return render(request, 'article.html', {
                     'title': article.title,
                     'author': article.author,
+                    'date': article.date.strftime('%B %d, %Y'),
                     'text': article.text
                 })
 
