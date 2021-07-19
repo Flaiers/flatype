@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.create_new, name = 'create_new'),
+    path('vremya-raboty-iyul-07-19', views.test, name = 'viewing')
 ]
 
 handler404 = views.Exceptions().page_not_found

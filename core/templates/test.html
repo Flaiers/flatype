@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 
+{% block title %}{{ title }} – {% endblock %}
+
 {% block content %}
 <div class="tl_page_wrap">
   <div class="tl_page">
     <main class="tl_article tl_article_editable tl_article_edit title_focused">
-      <article id="_tl_editor" class="tl_article_content ql-container"><div class="ql-editor" contenteditable="true" dir="auto"><h1 data-placeholder="Title" data-label="Title" class="empty"><br></h1><address data-placeholder="Your name" data-label="Author" class="empty"><br></address><p data-placeholder="Your story..." class="empty"><br></p></div><div class="ql-clipboard" contenteditable="true" tabindex="-1"></div><div id="_tl_link_tooltip" class="tl_link_tooltip"></div><div id="_tl_tooltip" class="tl_tooltip">
+      <header class="tl_article_header">
+        <h1 dir="auto"></h1>
+        <address dir="auto">
+          <a rel="author"></a>
+          <time datetime=""></time>
+        </address>
+      </header>
+      <article id="_tl_editor" class="tl_article_content ql-container"><div class="ql-editor" contenteditable="true" dir="auto"><h1 data-placeholder="Title" data-label="Title">{{ title }}</h1><address data-placeholder="Your name" data-label="Author">{{ author }}</address><p data-placeholder="Your story...">{{ text }}</p></div><div class="ql-clipboard" contenteditable="true" tabindex="-1"></div><div id="_tl_link_tooltip" class="tl_link_tooltip"></div><div id="_tl_tooltip" class="tl_tooltip">
         <div class="buttons">
           <span class="button_hover"></span>
           <span class="button_group">
@@ -39,9 +48,4 @@
     </main>
   </div>
 </div>
-<form method="post" action="">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" id="_publish_button" class="button publish_button">Publish</button>
-</form>
 {% endblock %}
