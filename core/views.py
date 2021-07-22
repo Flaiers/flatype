@@ -30,10 +30,14 @@ def create_new(request):
 
 
 @login_required
-def viewing(request):
-    article = Article.objects.get(name='')
-    return render(request, 'viewing.html', {'article': article})
-
+def viewing(request, slug):
+    article = Article.objects.get(slug=slug)
+    return render(request, 'article.html', {
+                    'title': article.title,
+                    'author': article.author,
+                    'date': article.date.strftime('%B %d, %Y'),
+                    'text': article.text
+                })
 
 class Exceptions():
 

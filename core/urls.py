@@ -1,12 +1,16 @@
 from django.urls import path
+from .views import Exceptions
 from . import views
 
 
 urlpatterns = [
     path('', views.create_new, name = 'create_new'),
+    path('<slug:slug>/', views.viewing, name='article'),
 ]
 
-handler404 = views.Exceptions().page_not_found
-handler500 = views.Exceptions().server_error
-handler400 = views.Exceptions().bad_request
-handler403 = views.Exceptions().permission_denied
+classExcept = Exceptions()
+
+handler404 = classExcept.page_not_found
+handler500 = classExcept.server_error
+handler400 = classExcept.bad_request
+handler403 = classExcept.permission_denied
