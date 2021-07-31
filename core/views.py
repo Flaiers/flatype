@@ -1,9 +1,8 @@
-import environ
 from .models import Article
 from .forms import ArticleForm
+
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import requires_csrf_token
 
@@ -11,10 +10,6 @@ from django.views.decorators.csrf import requires_csrf_token
 @login_required
 def create_new(request):
     if request.method == 'POST':
-        env = environ.Env(
-            DEBUG=(bool, True)
-        )
-        environ.Env.read_env('./.env')
 
         form = ArticleForm(request.POST)
 
@@ -38,6 +33,7 @@ def viewing(request, slug):
                     'date': article.date.strftime('%B %d, %Y'),
                     'text': article.text
                 })
+
 
 class Exceptions():
 
