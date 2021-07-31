@@ -1,9 +1,9 @@
-import environ
 from .models import Article
 from .forms import ArticleForm
+
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.utils.text import slugify
+from django.shortcuts import redirect
+
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import requires_csrf_token
 
@@ -11,10 +11,6 @@ from django.views.decorators.csrf import requires_csrf_token
 @login_required
 def create_new(request):
     if request.method == 'POST':
-        env = environ.Env(
-            DEBUG=(bool, True)
-        )
-        environ.Env.read_env('./.env')
 
         form = ArticleForm(request.POST)
 
@@ -22,7 +18,8 @@ def create_new(request):
             article = form.save(commit=False)
             article.author = request.user
             article.save()
-            return HttpResponse('Hello, World!')
+
+            return redirect('viewing', slug=article.slug)
     else:
         form = ArticleForm()
 
@@ -32,12 +29,31 @@ def create_new(request):
 @login_required
 def viewing(request, slug):
     article = Article.objects.get(slug=slug)
-    return render(request, 'article.html', {
+
+    if request.GET.get('edit', False) and request.user == article.author:
+
+        if request.method == 'POST':
+
+            form = ArticleForm(request.POST)
+            if form.is_valid():
+                article.title = request.POST.get('title')
+                article.text = request.POST.get('text')
+                article.save()
+
+                return redirect('viewing', slug=article.slug)
+
+        else:
+            form = ArticleForm(instance=article)
+
+            return render(request, 'writing.html', {'form': form})
+
+    return render(request, 'viewing.html', {
                     'title': article.title,
                     'author': article.author,
                     'date': article.date.strftime('%B %d, %Y'),
                     'text': article.text
                 })
+
 
 class Exceptions():
 
