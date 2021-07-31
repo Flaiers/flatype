@@ -2,7 +2,8 @@ from .models import Article
 from .forms import ArticleForm
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import redirect
+
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import requires_csrf_token
 
@@ -17,7 +18,8 @@ def create_new(request):
             article = form.save(commit=False)
             article.author = request.user
             article.save()
-            return HttpResponse('Hello, World!')
+
+            return redirect('article', slug=article.slug)
     else:
         form = ArticleForm()
 
