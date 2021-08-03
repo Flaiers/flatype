@@ -1,10 +1,10 @@
 from .models import Article
 from .forms import ArticleForm
 
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 
 from django.contrib.auth.decorators import login_required
+from django.db.utils import IntegrityError
 from django.views.decorators.csrf import requires_csrf_token
 
 
@@ -17,7 +17,14 @@ def create_new(request):
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
-            article.save()
+
+            try:
+                article.save()
+            except IntegrityError:
+                objects = Article.objects.filter(title=article.title)
+                number = [int(object.slug.split('-')[-1]) for object in objects][-1]
+                article.slug += f'-{number + 1}'
+                article.save()
 
             return redirect('viewing', slug=article.slug)
     else:
