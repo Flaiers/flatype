@@ -1,11 +1,12 @@
 from django.urls import path
+
 from .views import Exceptions
 from . import views
 
 
 urlpatterns = [
-    path('', views.create_new, name = 'create_new'),
-    path('<slug:slug>/', views.viewing, name='article'),
+    path('', views.create_new, name='create_new'),
+    path('<slug:slug>/', views.viewing, name='viewing'),
 ]
 
 classExcept = Exceptions()
