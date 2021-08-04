@@ -9,9 +9,9 @@ urlpatterns = [
     path('<slug:slug>/', views.viewing, name='viewing'),
 ]
 
-classExcept = Exceptions()
+e = Exceptions()
 
-handler404 = classExcept.page_not_found
-handler500 = classExcept.server_error
-handler400 = classExcept.bad_request
-handler403 = classExcept.permission_denied
+handler400 = e.bad_request
+handler403 = e.permission_denied
+handler404 = e.page_not_found
+handler500 = e.server_error
