@@ -54,7 +54,7 @@ def viewing(request, slug):
 
             return render(request, 'writing.html', {'form': form})
 
-    return render(request, 'viewing_test.html', {
+    return render(request, 'viewing.html', {
                     'title': article.title,
                     'author': article.author,
                     'date': article.date.strftime('%B %d, %Y'),
