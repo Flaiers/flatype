@@ -8,15 +8,6 @@ from django.db.utils import IntegrityError
 from django.views.decorators.csrf import requires_csrf_token
 
 
-def test(request):
-    article = Article.objects.get(slug=request.path_info.replace('/', ''))
-    return render(request, 'test.html', {
-                    'title': article.title,
-                    'author': article.author,
-                    'text': article.text
-                })
-
-
 @login_required
 def create_new(request):
     if request.method == 'POST':
@@ -63,7 +54,7 @@ def viewing(request, slug):
 
             return render(request, 'writing.html', {'form': form})
 
-    return render(request, 'viewing.html', {
+    return render(request, 'viewing_test.html', {
                     'title': article.title,
                     'author': article.author,
                     'date': article.date.strftime('%B %d, %Y'),
