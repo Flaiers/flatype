@@ -16,7 +16,7 @@ def create_new(request):
         if form.is_valid():
             article = form.save(commit=False)
 
-            request.user = User.objects.get(username='AnonymousUser') if str(request.user) == 'AnonymousUser' else request.user
+            request.user = User.objects.get(username=request.user) if str(request.user) == 'AnonymousUser' else request.user
             article.author = request.user
 
             try:
