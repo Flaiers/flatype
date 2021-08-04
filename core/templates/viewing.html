@@ -13,6 +13,9 @@
     <div class="text">
         <p>{{ text }}</p>
     </div>
-    <input type="button" value="EDIT" onClick="document.location = '?edit=1'"/>
+    {% if author == request.user %}
+      <!--- <input type="button" value="EDIT" onClick="document.location = '?edit=1'"> --->
+      <input type="button" value="EDIT" onClick="localStorage.setItem('edit', 1); location.reload()">
+    {% endif %}
   </div>
 {% endblock %}
