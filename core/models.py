@@ -1,16 +1,9 @@
-import environ
-
 from datetime import date
 
 from django.db import models
+from django.conf import settings
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-
-
-env = environ.Env(
-        DEBUG=(bool, True)
-    )
-environ.Env.read_env('./.env')
 
 
 class Article(models.Model):
@@ -25,5 +18,5 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(''.join(eval(env('ALPHABET')).get(w, w) for w in self.title.lower())) + self.date.strftime('-%m-%d')
+            self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w) for w in self.title.lower())) + self.date.strftime('-%m-%d')
         super(Article, self).save(*args, **kwargs)

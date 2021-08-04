@@ -68,17 +68,17 @@ class Exceptions():
         return
 
     @requires_csrf_token
-    def page_not_found(self, request, exception):
-        return render(request, 'exceptions/404.html', status=404)
-
-    @requires_csrf_token
-    def server_error(self, request):
-        return render(request, 'exceptions/500.html', status=500)
-
-    @requires_csrf_token
     def bad_request(self, request, exception):
         return render(request, 'exceptions/400.html', status=400)
 
     @requires_csrf_token
     def permission_denied(self, request, exception):
         return render(request, 'exceptions/403.html', status=403)
+
+    @requires_csrf_token
+    def page_not_found(self, request, exception):
+        return render(request, 'exceptions/404.html', status=404)
+
+    @requires_csrf_token
+    def server_error(self, request):
+        return render(request, 'exceptions/500.html', status=500)

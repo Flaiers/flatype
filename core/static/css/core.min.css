@@ -441,6 +441,7 @@ body.mobile .button_hover {
   border-radius: 3px;
   border: none;
   cursor: pointer;
+  float: right;
 }
 @media (max-width: 960px) {
   .tl_blocks button {
