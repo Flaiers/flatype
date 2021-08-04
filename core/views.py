@@ -3,12 +3,11 @@ from .forms import ArticleForm
 
 from django.shortcuts import render, redirect
 
-from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import requires_csrf_token
 
 
-@login_required
 def create_new(request):
     if request.method == 'POST':
 
@@ -16,6 +15,8 @@ def create_new(request):
 
         if form.is_valid():
             article = form.save(commit=False)
+
+            request.user = User.objects.get(username='AnonymousUser') if str(request.user) == 'AnonymousUser' else request.user
             article.author = request.user
 
             try:
@@ -33,7 +34,6 @@ def create_new(request):
     return render(request, 'create_new.html', {'form': form})
 
 
-@login_required
 def viewing(request, slug):
     article = Article.objects.get(slug=slug)
 
