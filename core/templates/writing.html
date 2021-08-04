@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="PUBLISH">
-  </form>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" id="_publish_button" class="button publish_button">Publish</button>
+</form>
 {% endblock %}
