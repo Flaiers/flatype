@@ -6,7 +6,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
 from django.db.utils import IntegrityError
-from django.contrib.auth.models import User
 
 
 @csrf_exempt
@@ -21,14 +20,15 @@ def try_login(request):
             login(request, user)
             return HttpResponse('ok')
         else:
-            return HttpResponse('Disabled account')
+            return HttpResponse('Disabled account', status=410)
     else:
-        return HttpResponse('Incorrect data')
+        return HttpResponse('Incorrect data', satus=406)
 
 @csrf_exempt
 def try_logout(request):
-    if not getattr(request.user, 'is_authenticated', False):
+    if not request.user.is_authenticated:
         return HttpResponse('User is not authenticated', status=401)
+
     logout(request)
     return HttpResponse('ok')
 
