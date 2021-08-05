@@ -13,13 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('core/', include('core.urls'))
 """
-
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', include('api.urls')),
     path('', include('core.urls')),
 ]
 
@@ -28,4 +29,3 @@ if settings.DEBUG:
     from django.views import static
 
     urlpatterns.append(url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}))
-    urlpatterns.append(url(r'^media/(?P<path>.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}))

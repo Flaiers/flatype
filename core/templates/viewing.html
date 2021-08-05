@@ -7,26 +7,19 @@
   <div class="tl_page">
     <main class="tl_article tl_article_editable">
       <header class="tl_article_header">
-        <h1 dir="auto">{{ title }}</h1>
-        <address dir="auto">
-          <a rel="author" target="_blank">👨🏻‍💻 {{ author }}</a><!--
-         --><time>{{ date }}</time>
-        </address>
+        <h1>{{ title }}</h1>
+        <address><a>👨🏻‍💻 {{ author }}</a><time>{{ date }}</time></address>
       </header>
-      <article id="_tl_editor" class="tl_article_content ql-container ql-disabled">
-        <div class="ql-editor" contenteditable="false" dir="auto"><!--
-        --><h1 data-placeholder="Title" data-label="Title">{{ title }}</h1><!--
-        --><p>{{ text }}</p><!--
-     --></div>
+      <article class="tl_article_content ql-container ql-disabled">
+        <div><h1>{{ title }}</h1><p>{{ text }}</p></div>
       </article>
       <aside class="tl_article_buttons">
-        <div class="account account_top">👨🏻‍💻 {{ request.user }}</div>
+        <div class="account account_top"><a style="border-bottom:none" href="#">👤&nbsp{{ request.user }}</a></div>
         {% if author == request.user %}
-          <button id="_edit_button" class="button edit_button">Edit</button><!--
+          <button id="_edit_button" class="button edit_button", onclick="location='?edit=1'">Edit</button><!--
        --><button id="_publish_button" class="button publish_button">Publish</button>
         {% endif %}
-        <div class="account account_bottom">👨🏻‍💻 {{ request.user }}</div>
-        <div id="_error_msg" class="error_msg"></div>
+        <div class="account account_bottom"><a style="border-bottom:none" href="#">👤&nbsp{{ request.user }}</a></div>
       </aside>
     </main>
   </div>
