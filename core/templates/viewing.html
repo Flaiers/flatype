@@ -14,12 +14,12 @@
         <div class="ql-editor"><h1>{{ title }}</h1><p>{{ text }}</p></div>
       </article>
       <aside class="tl_article_buttons">
-        <div class="account account_top">👨🏻‍💻 {{ request.user }}</div>
+        <div class="account account_top"><a style="border-bottom:none" href="#">👤 {{ request.user }}</a></div>
         {% if author == request.user %}
           <button id="_edit_button" class="button edit_button">Edit</button><!--
        --><button id="_publish_button" class="button publish_button">Publish</button>
         {% endif %}
-        <div class="account account_bottom">👨🏻‍💻 {{ request.user }}</div>
+        <div class="account account_bottom"><a style="border-bottom:none" href="#">👤 {{ request.user }}</a></div>
       </aside>
     </main>
   </div>
