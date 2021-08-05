@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-
 urlpatterns = [
-    path('__save/', views.save, name='save'),
+    path('login/', views.try_login),
+    path('logout/', views.try_logout),
 ]
