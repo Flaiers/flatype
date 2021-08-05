@@ -35,7 +35,10 @@ def create_new(request):
 
 
 def viewing(request, slug):
-    article = Article.objects.get(slug=slug)
+    try:
+        article = Article.objects.get(slug=slug)
+    except:
+        return render(request, 'exceptions/404.html', status=404)
 
     if request.GET.get('edit', False) and request.user == article.author:
 
