@@ -1,29 +1,34 @@
 from core.models import Article
 
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 from django.db.utils import IntegrityError
-from django.contrib.auth.models import User
 
 
 @csrf_exempt
+@require_http_methods(["POST"])
 def try_login(request):
     username = request.POST['login']
     password = request.POST['password']
 
     user = authenticate(request, username=username, password=password)
     if user is not None:
-        login(request, user)
-        return HttpResponse('ok')
+        if user.is_active:
+            login(request, user)
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('Disabled account', status=410)
     else:
-        return HttpResponse('Incorrect data')
+        return HttpResponse('Incorrect data', satus=406)
 
 @csrf_exempt
 def try_logout(request):
-    if not getattr(request.user, 'is_authenticated', False):
+    if not request.user.is_authenticated:
         return HttpResponse('User is not authenticated', status=401)
+
     logout(request)
     return HttpResponse('ok')
 
@@ -31,8 +36,11 @@ def try_logout(request):
 def create(request, form):
     article = form.save(commit=False)
 
-    request.user = User.objects.get(username=request.user) if str(request.user) == 'AnonymousUser' else request.user
-    article.author = request.user
+    if article.author is None:
+        article.author = request.user
+
+    if request.user.is_authenticated:
+        article.owner = request.user
 
     try:
         article.save()

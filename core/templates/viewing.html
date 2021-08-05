@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }} – {% endblock %}
+{% block title %}{{ article.title }} – {% endblock %}
 
 {% block content %}
 <div class="tl_page_wrap">
   <div class="tl_page">
     <main class="tl_article tl_article_editable">
       <header class="tl_article_header">
-        <h1>{{ title }}</h1>
-        <address><a>👨🏻‍💻 {{ author }}</a><time>{{ date }}</time></address>
+        <h1>{{ article.title }}</h1>
+        <address><a>👨🏻‍💻 {{ article.author }}</a><time>{{ date }}</time></address>
       </header>
       <article class="tl_article_content ql-container ql-disabled">
-        <div><h1>{{ title }}</h1><p>{{ text }}</p></div>
+        <div><h1>{{ article.title }}</h1><p>{{ article.text }}</p></div>
       </article>
       <aside class="tl_article_buttons">
         <div class="account account_top"><a style="border-bottom:none" href="#">👤&nbsp{{ request.user }}</a></div>
-        {% if author == request.user %}
+        {% if article.owner == request.user %}
           <button id="_edit_button" class="button edit_button", onclick="location='?edit=1'">Edit</button><!--
        --><button id="_publish_button" class="button publish_button">Publish</button>
         {% endif %}

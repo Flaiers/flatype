@@ -28,7 +28,7 @@ def viewing(request, slug):
     except:
         return render(request, 'exceptions/404.html', status=404)
 
-    if request.GET.get('edit', False) and request.user == article.author:
+    if request.GET.get('edit', False) and request.user == article.owner:
 
         if request.method == 'POST':
 
@@ -44,10 +44,8 @@ def viewing(request, slug):
             return render(request, 'writing.html', {'form': form})
 
     return render(request, 'viewing.html', {
-        'title': article.title,
-        'author': article.author,
+        'article': article,
         'date': article.date.strftime('%B %d, %Y'),
-        'text': article.text
     })
 
 
