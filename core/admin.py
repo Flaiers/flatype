@@ -7,7 +7,6 @@ from .models import Article
 class ArticleAdmin(admin.ModelAdmin):
     fields = ('title', 'slug', 'author', 'text', 'date',)
     list_display = ('title', 'slug', 'author', 'date',)
-    autocomplete_fields = ('author',)
     search_fields = ('title', 'text',)
     date_hierarchy = 'date'
 
