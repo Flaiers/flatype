@@ -17,8 +17,11 @@ def try_login(request):
 
     user = authenticate(request, username=username, password=password)
     if user is not None:
-        login(request, user)
-        return HttpResponse('ok')
+        if user.is_active:
+            login(request, user)
+            return HttpResponse('ok')
+        else:
+            return HttpResponse('Disabled account')
     else:
         return HttpResponse('Incorrect data')
 
@@ -35,6 +38,9 @@ def create(request, form):
 
     if article.author is None:
         article.author = request.user
+
+    if request.user.is_authenticated:
+        article.owner = request.user
 
     try:
         article.save()
