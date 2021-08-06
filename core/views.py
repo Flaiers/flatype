@@ -15,7 +15,11 @@ def create_new(request):
         if form.is_valid():
             article = try_save(request, form)
 
-            return redirect('viewing', slug=article.slug)
+            response = redirect('viewing', slug=article.slug)
+            if not request.user.is_authenticated:
+                response.set_cookie("uuid", article.owner_hash)
+
+            return response
     else:
         form = ArticleForm()
 
