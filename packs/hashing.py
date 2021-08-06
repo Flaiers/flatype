@@ -1,17 +1,15 @@
-import uuid, base64
+import os, hashlib
 
 
 def GenerateHash(Model=None):
-    hash = base64.urlsafe_b64encode(uuid.uuid1().bytes)[:32]
+    hash = hashlib.md5(os.urandom(64)).hexdigest()
 
     if Model is not None:
         hash_exist = Model.objects.filter(owner_hash=hash)
 
         while hash_exist:
-            hash = base64.urlsafe_b64encode(uuid.uuid1().bytes)[:32]
+            hash = hashlib.md5(os.urandom(64)).hexdigest()
             hash_exist = Model.objects.filter(owner_hash=hash)
             continue
-
-    hash = hash.decode('utf-8')
 
     return hash
