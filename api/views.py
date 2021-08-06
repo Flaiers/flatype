@@ -1,5 +1,6 @@
 from core.models import Article
 from core.forms import ArticleForm
+from packs.hashing import GenerateHash
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
@@ -54,6 +55,12 @@ def try_save(request, form=None, external=False):
 
     if request.user.is_authenticated:
         article.owner = request.user
+    else:
+        owner_hash = request.COOKIES.get('owner_hash')
+        if owner_hash:
+            article.owner_hash = owner_hash
+        else:
+            article.owner_hash = GenerateHash(Article)
 
     try:
         article.save()

@@ -1,5 +1,4 @@
 from api.views import try_save, try_edit
-from packs.hashing import GenerateHash
 
 from .models import Article
 from .forms import ArticleForm
@@ -18,8 +17,6 @@ def create_new(request):
 
             response = redirect('viewing', slug=article.slug)
             if not request.user.is_authenticated:
-                article.owner_hash = GenerateHash(Article)
-                article.save()
                 response.set_cookie("owner_hash", article.owner_hash)
 
             return response

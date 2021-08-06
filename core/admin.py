@@ -5,7 +5,7 @@ from .models import Article
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    fields = ('title', 'slug', 'author', 'owner', 'text', 'date',)
+    fields = ('title', 'slug', 'author', 'owner', 'owner_hash', 'text', 'date',)
     list_display = ('title', 'slug', 'author', 'date',)
     search_fields = ('title', 'text',)
     date_hierarchy = 'date'
