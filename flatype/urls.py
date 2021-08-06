@@ -24,6 +24,10 @@ urlpatterns = [
     path('', include('core.urls')),
 ]
 
+admin.site.site_header = "Flatype Admin Panel"
+admin.site.site_title = "Flatype Admin"
+admin.site.index_title = "Welcome to Flatype Admin Panel"
+
 if settings.DEBUG:
     from django.conf.urls import url
     from django.views import static
