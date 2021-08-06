@@ -1,4 +1,4 @@
-from api.views import create, edit
+from api.views import try_save, try_edit
 
 from .models import Article
 from .forms import ArticleForm
@@ -13,7 +13,7 @@ def create_new(request):
         form = ArticleForm(request.POST)
 
         if form.is_valid():
-            article = create(request, form)
+            article = try_save(request, form)
 
             return redirect('viewing', slug=article.slug)
     else:
@@ -34,7 +34,7 @@ def viewing(request, slug):
 
             form = ArticleForm(request.POST)
             if form.is_valid():
-                article = edit(request, article)
+                article = try_edit(request, article)
 
                 return redirect('viewing', slug=article.slug)
 
