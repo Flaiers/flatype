@@ -1,7 +1,5 @@
 from datetime import date
 
-from packs.hashing import GenerateHash
-
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
@@ -23,5 +21,4 @@ class Article(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w) for w in self.title.lower())) + self.date.strftime('-%m-%d')
-        self.owner_hash = GenerateHash(Article)
         super(Article, self).save(*args, **kwargs)

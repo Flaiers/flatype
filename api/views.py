@@ -59,8 +59,11 @@ def try_save(request, form=None, external=False):
         article.save()
     except IntegrityError:
         objects = Article.objects.filter(title=article.title)
-        number = [int(object.slug.split('-')[-1]) for object in objects][-1]
-        article.slug += f'-{number + 1}'
+        if len(objects) != 1:
+            number = [int(object.slug.split('-')[-1]) for object in objects][-1]
+            article.slug += f'-{number + 1}'
+        else:
+            article.slug += '-2'
         article.save()
 
     if external:
