@@ -64,7 +64,7 @@ def try_save(request, form=None, external=False):
         article.save()
 
     if external:
-        return JsonResponse({'data': 'ok'})
+        return JsonResponse({'data': f"http://{request.headers['Host']}/{article.slug}"})
 
     return article
 
@@ -79,7 +79,10 @@ def try_edit(request, article=None, external=False):
             return JsonResponse({'error': True, 'data': 'Article not found'}, satus=404)
 
     article.title = request.POST.get('title')
-    article.author = request.POST.get('author')
+
+    if request.POST.get('author'):
+        article.author = request.POST.get('author')
+
     article.text = request.POST.get('text')
     article.save()
 
