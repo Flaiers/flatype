@@ -12,5 +12,5 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj:
-            return self.readonly_fields + ('slug', 'author', 'date',)
+            return self.readonly_fields + ('slug', 'owner', 'date',)
         return self.readonly_fields
