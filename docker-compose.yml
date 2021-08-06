@@ -2,15 +2,16 @@ version: '3.1'
 
 services:
   nginx:
-    build: ./nginx
-    container_name: nginx_web
-    image: nginx_image
-    depends_on:
-      - web
+    image: nginx
+    container_name: flatype_nginx
     ports:
       - "80:80"
+    restart: always
+    depends_on:
+      - web
     volumes:
-      - "./static:/static"
+      - "./static:/usr/projects/flatype/static"
+      - "./nginx:/etc/nginx/conf.d"
 
   web:
     build: .
