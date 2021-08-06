@@ -57,6 +57,7 @@ def create(request, form):
 
 def edit(request, article):
     article.title = request.POST.get('title')
+    article.author = request.POST.get('author')
     article.text = request.POST.get('text')
     article.save()
 
