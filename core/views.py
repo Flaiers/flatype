@@ -35,7 +35,8 @@ def viewing(request, slug):
     except:
         return render(request, 'exceptions/404.html', status=404)
 
-    if request.GET.get('edit', False) and request.user == article.owner:
+    owner_hash = request.COOKIES.get('owner_hash', None)
+    if request.GET.get('edit', False) and (request.user == article.owner or article.owner_hash == owner_hash):
 
         if request.method == 'POST':
 
@@ -52,6 +53,7 @@ def viewing(request, slug):
 
     return render(request, 'viewing.html', {
         'article': article,
+        'owner_hash': owner_hash,
         'date': article.date.strftime('%B %d, %Y'),
     })
 
