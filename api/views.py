@@ -11,6 +11,9 @@ from django.db.utils import IntegrityError
 @csrf_exempt
 @require_http_methods(["POST"])
 def try_login(request):
+    if request.user.is_authenticated:
+        return HttpResponse('User already authenticated', status=409)
+
     username = request.POST['login']
     password = request.POST['password']
 
@@ -20,9 +23,9 @@ def try_login(request):
             login(request, user)
             return HttpResponse('ok')
         else:
-            return HttpResponse('Disabled account', status=410)
+            return HttpResponse('User is locked', status=423)
     else:
-        return HttpResponse('Incorrect data', satus=406)
+        return HttpResponse('User not found', satus=404)
 
 @csrf_exempt
 def try_logout(request):
