@@ -1,8 +1,12 @@
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 from core.models import Article
 from core.forms import ArticleForm
+
+from ext_auth.models import ExternalHashId
+
 from packs.hashing import GenerateHash
 
 from django.views.decorators.http import require_http_methods
@@ -15,12 +19,31 @@ from django.db.utils import IntegrityError
 
 @csrf_exempt
 @require_http_methods(["POST"])
+def try_register(request):
+    form = UserCreationForm(request.POST)
+    if not form.is_valid():
+        return JsonResponse({'error': True, 'data': 'Form data is not valid'}, status=422)
+
+    user = form.save(commit=False)
+    user.first_name = request.POST.get('first_name', '')
+    user.save()
+
+    owner_hash = request.session.get('externalid')
+    if owner_hash:
+        ExternalHashId.objects.create(user=user, session=owner_hash)
+
+
+    return JsonResponse({'data': 'ok'})
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
 def try_login(request):
     if request.user.is_authenticated:
         return JsonResponse({'error': True, 'data': 'User already authenticated'}, status=409)
 
-    username = request.POST['login']
-    password = request.POST['password']
+    username = request.POST.get('username')
+    password = request.POST.get('password')
 
     user = authenticate(request, username=username, password=password)
     if user is not None:
@@ -86,6 +109,7 @@ def try_save(request, form=None, external=False):
 
     return article
 
+# TODO: Валидация по форме
 @csrf_exempt
 @require_http_methods(["POST"])
 def try_edit(request, article=None, external=False):
