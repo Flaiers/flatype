@@ -1,3 +1,6 @@
+from django.contrib.sessions.models import Session
+from django.contrib.auth.models import User
+
 from core.models import Article
 from core.forms import ArticleForm
 from packs.hashing import GenerateHash
@@ -27,7 +30,7 @@ def try_login(request):
         else:
             return JsonResponse({'error': True, 'data': 'User is locked'}, status=423)
     else:
-        return JsonResponse({'error': True, 'data': 'User not found'}, satus=404)
+        return JsonResponse({'error': True, 'data': 'User not found'}, status=404)
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -88,10 +91,23 @@ def try_save(request, form=None, external=False):
 def try_edit(request, article=None, external=False):
     if article is None:
         try:
-            article = Article.objects.get(slug=request.POST.get('article', None))
+            article = Article.objects.get(slug=request.POST.get('article'))
             external = True
         except:
-            return JsonResponse({'error': True, 'data': 'Article not found'}, satus=404)
+            return JsonResponse({'error': True, 'data': 'Article not found'}, status=404)
+
+    if external:
+
+        owner_hash = request.session.get('externalid')
+        if not owner_hash:
+
+            session_key = request.session.session_key
+            object = Session.objects.get(session_key=session_key)
+            user_id = int(object.get_decoded()['_auth_user_id'])
+            request.user = User.objects.get(id=user_id)
+
+        if not (request.user == article.owner or article.owner_hash == owner_hash):
+            return JsonResponse({'error': True, 'data': 'User is not authenticated'}, status=401)
 
     article.title = request.POST.get('title')
 

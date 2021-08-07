@@ -21,7 +21,7 @@ env = environ.Env(
 environ.Env.read_env('./.env')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = environ.Path(__file__) - 2
+BASE_DIR = environ.Path(__file__) - 3
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -79,18 +79,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'flatype.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
