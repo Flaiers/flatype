@@ -56,11 +56,12 @@ def try_save(request, form=None, external=False):
     if request.user.is_authenticated:
         article.owner = request.user
     else:
-        owner_hash = request.COOKIES.get('owner_hash')
+        owner_hash = request.session.get('externalid')
         if owner_hash:
             article.owner_hash = owner_hash
         else:
             article.owner_hash = GenerateHash(Article)
+            request.session['externalid'] = article.owner_hash
 
     try:
         article.save()

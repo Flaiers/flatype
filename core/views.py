@@ -15,12 +15,7 @@ def create_new(request):
         if form.is_valid():
             article = try_save(request, form)
 
-            response = redirect('viewing', slug=article.slug)
-            if not request.user.is_authenticated:
-                # request.session['externalid'] = article.owner_hash
-                response.set_cookie('externalid', article.owner_hash)
-
-            return response
+            return redirect('viewing', slug=article.slug)
     else:
         form = ArticleForm()
 
@@ -33,7 +28,7 @@ def viewing(request, slug):
     except:
         return render(request, 'exceptions/404.html', status=404)
 
-    owner_hash = request.COOKIES.get('owner_hash', None)
+    owner_hash = request.session.get('externalid')
     if request.GET.get('edit', False) and (request.user == article.owner or article.owner_hash == owner_hash):
 
         if request.method == 'POST':
