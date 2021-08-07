@@ -8,3 +8,4 @@ pytz
 sqlparse
 zope.interface
 requests
+psycopg2
