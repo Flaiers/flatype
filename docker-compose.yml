@@ -5,13 +5,28 @@ services:
     image: nginx
     container_name: flatype_nginx
     ports:
-      - "80:80"
+      - 80:80
     restart: always
     depends_on:
       - web
     volumes:
-      - "./static:/usr/projects/flatype/static"
-      - "./nginx:/etc/nginx/conf.d"
+      - ./static:/usr/projects/flatype/static
+      - ./nginx:/etc/nginx/conf.d
+
+  db:
+    container_name: flatype_db
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - /usr/projects/psql/flatype_db:/var/lib/psql/data
+    environment:
+      - POSTGRES_PASSWORD
+      - POSTGRES_USER
+      - POSTGRES_DB
 
   web:
     build: .
@@ -20,6 +35,8 @@ services:
     command: bash -c "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 flatype.wsgi --reload"
     restart: always
     ports:
-      - "8000:8000"
+      - 8000:8000
     volumes:
-      - ".:/usr/projects/flatype"
+      - .:/usr/projects/flatype
+    environment:
+      - LEVEL=PRODUCTION
