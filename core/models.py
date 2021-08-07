@@ -7,11 +7,12 @@ from django.contrib.auth.models import User
 
 
 class Article(models.Model):
-    title = models.CharField(max_length=150, verbose_name="Tittle")
-    slug = models.SlugField(null=True, blank=True, unique=True)
-    author = models.CharField(max_length=64, null=True, blank=True, verbose_name="Your name")
+    title = models.CharField(max_length=150)
+    slug = models.SlugField(unique=True, db_index=True)
+    author = models.CharField(max_length=64, null=True, blank=True)
     owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
-    text = models.TextField(verbose_name="Your story")
+    owner_hash = models.CharField(max_length=32, null=True, blank=True)
+    text = models.TextField()
     date = models.DateField(default=date.today)
 
     def __str__(self):

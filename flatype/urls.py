@@ -19,6 +19,7 @@ from django.conf import settings
 
 
 urlpatterns = [
+    path('auth/', include('ext_auth.urls')),
     path('admin/', admin.site.urls),
     path('api/v1/', include('api.urls')),
     path('', include('core.urls')),

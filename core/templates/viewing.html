@@ -15,7 +15,7 @@
       </article>
       <aside class="tl_article_buttons">
         <div class="account account_top"><a style="border-bottom:none" href="#">👤&nbsp{{ request.user }}</a></div>
-        {% if article.owner == request.user %}
+        {% if article.owner == request.user or article.owner_hash == owner_hash %}
           <button id="_edit_button" class="button edit_button", onclick="location='?edit=1'">Edit</button><!--
        --><button id="_publish_button" class="button publish_button">Publish</button>
         {% endif %}

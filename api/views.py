@@ -1,5 +1,6 @@
 from core.models import Article
 from core.forms import ArticleForm
+from packs.hashing import GenerateHash
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
@@ -54,17 +55,31 @@ def try_save(request, form=None, external=False):
 
     if request.user.is_authenticated:
         article.owner = request.user
+    else:
+        owner_hash = request.session.get('externalid')
+        if owner_hash:
+            article.owner_hash = owner_hash
+        else:
+            article.owner_hash = GenerateHash(Article)
+            request.session['externalid'] = article.owner_hash
 
+    # TODO: переместить в модели
     try:
         article.save()
     except IntegrityError:
-        objects = Article.objects.filter(title=article.title)
-        number = [int(object.slug.split('-')[-1]) for object in objects][-1]
-        article.slug += f'-{number + 1}'
+        exists_slug = []
+        objects = Article.objects.all()
+        [exists_slug.append(object.slug) if article.slug in object.slug else None for object in objects]
+        print(exists_slug)
+        if len(exists_slug) != 1:
+            number = [int(exist_slug.split('-')[-1]) for exist_slug in exists_slug][-1] + 1
+            article.slug += f'-{number}'
+        else:
+            article.slug += '-2'
         article.save()
 
     if external:
-        return JsonResponse({'data': 'ok'})
+        return JsonResponse({'data': f"http://{request.headers['Host']}/{article.slug}"})
 
     return article
 
@@ -79,7 +94,10 @@ def try_edit(request, article=None, external=False):
             return JsonResponse({'error': True, 'data': 'Article not found'}, satus=404)
 
     article.title = request.POST.get('title')
-    article.author = request.POST.get('author')
+
+    if request.POST.get('author'):
+        article.author = request.POST.get('author')
+
     article.text = request.POST.get('text')
     article.save()
 
