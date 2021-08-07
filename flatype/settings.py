@@ -45,8 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.CoreConfig',
     'api.apps.ApiConfig',
+    'core.apps.CoreConfig',
+    'ext_auth.apps.ExtAuthConfig',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ALPHABET = env('ALPHABET')
+
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = ''

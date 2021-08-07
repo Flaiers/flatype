@@ -17,7 +17,8 @@ def create_new(request):
 
             response = redirect('viewing', slug=article.slug)
             if not request.user.is_authenticated:
-                response.set_cookie("owner_hash", article.owner_hash)
+                # request.session['externalid'] = article.owner_hash
+                response.set_cookie('externalid', article.owner_hash)
 
             return response
     else:
