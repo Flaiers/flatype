@@ -14,8 +14,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
-from django.db.utils import IntegrityError
-
 
 @csrf_exempt
 @require_http_methods(["POST"])
