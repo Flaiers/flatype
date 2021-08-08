@@ -11,6 +11,7 @@ services:
       - web
     volumes:
       - ./static:/usr/projects/flatype/static
+      - ./nginx/letsencrypt:/etc/letsencrypt
       - ./nginx:/etc/nginx/conf.d
 
   db:
