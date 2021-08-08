@@ -6,6 +6,7 @@ services:
     container_name: flatype_nginx
     ports:
       - 80:80
+      - 443:443
     restart: always
     depends_on:
       - web
