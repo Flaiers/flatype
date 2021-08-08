@@ -1,6 +1,6 @@
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from core.models import Article
 from core.forms import ArticleForm
@@ -26,10 +26,11 @@ def try_register(request):
 
     user = form.save(commit=False)
     user.first_name = request.POST.get('first_name', '')
+    user.last_name = request.POST.get('last_name', '')
+    user.email = request.POST.get('email', '')
     user.save()
 
-    owner_hash = request.session.get('externalid')
-    if owner_hash:
+    if owner_hash := request.session.get('externalid'):
         ExternalHashId.objects.create(user=user, session=owner_hash)
 
 
@@ -39,6 +40,10 @@ def try_register(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def try_login(request):
+    form = AuthenticationForm(data=request.POST)
+    if not form.is_valid():
+        return JsonResponse({'error': True, 'data': 'Form data is not valid'})
+
     if request.user.is_authenticated:
         return JsonResponse({'error': True, 'data': 'User already authenticated'}, status=409)
 
@@ -82,8 +87,7 @@ def try_save(request, form=None, external=False):
     if request.user.is_authenticated:
         article.owner = request.user
     else:
-        owner_hash = request.session.get('externalid')
-        if owner_hash:
+        if owner_hash := request.session.get('externalid'):
             article.owner_hash = owner_hash
         else:
             article.owner_hash = GenerateHash(Article)
