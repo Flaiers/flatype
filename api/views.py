@@ -51,14 +51,15 @@ def try_login(request):
     password = request.POST.get('password')
 
     user = authenticate(request, username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            return JsonResponse({'data': 'ok'})
-        else:
-            return JsonResponse({'error': True, 'data': 'User is locked'}, status=423)
-    else:
+    if user is None:
         return JsonResponse({'error': True, 'data': 'User not found'}, status=404)
+
+    if not user.is_active:
+        return JsonResponse({'error': True, 'data': 'User is locked'}, status=423)
+
+    login(request, user)
+    return JsonResponse({'data': 'ok'})
+
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -68,6 +69,7 @@ def try_logout(request):
 
     logout(request)
     return JsonResponse({'data': 'ok'})
+
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -113,7 +115,7 @@ def try_save(request, form=None, external=False):
 
     return article
 
-# TODO: Валидация по форме
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def try_edit(request, article=None, external=False):
@@ -125,6 +127,9 @@ def try_edit(request, article=None, external=False):
             return JsonResponse({'error': True, 'data': 'Article not found'}, status=404)
 
     if external:
+        form = ArticleForm(request.POST)
+        if not form.is_valid():
+            return JsonResponse({'error': True, 'data': 'Form data is not valid'})
 
         owner_hash = request.session.get('externalid')
         if not owner_hash:
