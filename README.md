@@ -1,4 +1,4 @@
-# Flatype
+# [Flatype](https://fla.codes/)
 
 The blog platform, idea taken from:
 
