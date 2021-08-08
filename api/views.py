@@ -95,20 +95,7 @@ def try_save(request, form=None, external=False):
             article.owner_hash = GenerateHash(Article)
             request.session['externalid'] = article.owner_hash
 
-    # TODO: переместить в модели
-    try:
-        article.save()
-    except IntegrityError:
-        exists_slug = []
-        objects = Article.objects.all()
-        [exists_slug.append(object.slug) if article.slug in object.slug else None for object in objects]
-        print(exists_slug)
-        if len(exists_slug) != 1:
-            number = [int(exist_slug.split('-')[-1]) for exist_slug in exists_slug][-1] + 1
-            article.slug += f'-{number}'
-        else:
-            article.slug += '-2'
-        article.save()
+    article.save()
 
     if external:
         return JsonResponse({'data': f"http://{request.headers['Host']}/{article.slug}"})
