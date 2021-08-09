@@ -8,8 +8,8 @@ source env/bin/activate
 pip install -U pip
 pip install -r requirements.txt
 
-cd src
+cd src/
 
 python manage.py collectstatic
 python manage.py migrate
-python manage.py runserver
+python manage.py runserver --insecure
