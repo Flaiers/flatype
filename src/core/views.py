@@ -29,7 +29,7 @@ def viewing(request, slug):
         return render(request, 'exceptions/404.html', status=404)
 
     owner_hash = request.session.get('externalid')
-    if request.GET.get('edit', False) and (request.user == article.owner or article.owner_hash == owner_hash):
+    if request.GET.get('edit', False) and (request.user == article.owner or owner_hash == article.owner_hash):
 
         if request.method == 'POST':
 
