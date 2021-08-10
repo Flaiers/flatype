@@ -15,7 +15,7 @@ from django.http import JsonResponse
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def try_register(request):
+def try_register(request) -> JsonResponse:
     form = UserCreationForm(request.POST)
     if not form.is_valid():
         return JsonResponse({'error': True, 'data': 'Form data is not valid'}, status=422)
@@ -40,7 +40,7 @@ def try_register(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def try_login(request):
+def try_login(request) -> JsonResponse:
     form = AuthenticationForm(data=request.POST)
     if not form.is_valid():
         return JsonResponse({'error': True, 'data': 'Form data is not valid'}, status=422)
@@ -64,7 +64,7 @@ def try_login(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def try_logout(request):
+def try_logout(request) -> JsonResponse:
     if not request.user.is_authenticated:
         return JsonResponse({'error': True, 'data': 'User is not authenticated'}, status=401)
 
