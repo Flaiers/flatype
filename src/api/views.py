@@ -1,5 +1,3 @@
-from django.contrib.sessions.models import Session
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from core.models import Article
@@ -31,7 +29,12 @@ def try_register(request):
     if owner_hash := request.session.get('externalid'):
         ExternalHashId.objects.create(user=user, session=owner_hash)
 
+        articles = Article.objects.filter(owner_hash=owner_hash)
+        for article in articles:
+            article.owner = user
+            article.save()
 
+    login(request, user)
     return JsonResponse({'data': 'ok'})
 
 
@@ -110,12 +113,6 @@ def try_edit(request, article=None, external=False):
         try:
             article = Article.objects.get(slug=request.POST.get('article'))
 
-            if not owner_hash:
-                session_key = request.session.session_key
-                object = Session.objects.get(session_key=session_key)
-                user_id = int(object.get_decoded()['_auth_user_id'])
-                request.user = User.objects.get(id=user_id)
-
             if not (request.user == article.owner or owner_hash == article.owner_hash):
                 return JsonResponse({'error': True, 'data': 'Forbidden'}, status=403)
 
@@ -132,7 +129,7 @@ def try_edit(request, article=None, external=False):
     if request.POST.get('author'):
         article.author = request.POST.get('author')
 
-    if request.user.is_authenticated and owner_hash:
+    if request.user.is_authenticated and owner_hash and article.owner is None:
         article.owner = request.user
 
     article.text = request.POST.get('text')
