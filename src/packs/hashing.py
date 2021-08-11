@@ -1,4 +1,5 @@
-import os, hashlib
+import os
+import hashlib
 
 
 def GenerateHash(Model=None) -> str:
