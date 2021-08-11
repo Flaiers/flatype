@@ -22,14 +22,15 @@ def create_new(request):
     return render(request, 'create_new.html', {'form': form})
 
 
-def viewing(request, slug):
+def viewing(request, slug: str):
     try:
         article = Article.objects.get(slug=slug)
-    except:
+    except Exception:
         return render(request, 'exceptions/404.html', status=404)
 
     owner_hash = request.session.get('externalid')
-    if request.GET.get('edit', False) and (request.user == article.owner or owner_hash == article.owner_hash):
+    if request.GET.get('edit', False) and \
+            (request.user == article.owner or owner_hash == article.owner_hash):
 
         if request.method == 'POST':
 
@@ -51,23 +52,23 @@ def viewing(request, slug):
     })
 
 
-class Exceptions():
+class Exceptions:
 
     def __init__(self):
         return
 
     @requires_csrf_token
-    def bad_request(self, request, exception):
+    def bad_request(self, request, exception) -> render:
         return render(request, 'exceptions/400.html', status=400)
 
     @requires_csrf_token
-    def permission_denied(self, request, exception):
+    def permission_denied(self, request, exception) -> render:
         return render(request, 'exceptions/403.html', status=403)
 
     @requires_csrf_token
-    def page_not_found(self, request, exception):
+    def page_not_found(self, request, exception) -> render:
         return render(request, 'exceptions/404.html', status=404)
 
     @requires_csrf_token
-    def server_error(self, request):
+    def server_error(self, request) -> render:
         return render(request, 'exceptions/500.html', status=500)
