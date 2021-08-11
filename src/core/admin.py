@@ -10,7 +10,7 @@ class ArticleAdmin(admin.ModelAdmin):
     search_fields = ('title', 'text',)
     date_hierarchy = 'date'
 
-    def get_readonly_fields(self, request, obj=None):
+    def get_readonly_fields(self, request, obj=None) -> tuple:
         if obj:
             return self.readonly_fields + ('slug', 'owner', 'date',)
         return self.readonly_fields

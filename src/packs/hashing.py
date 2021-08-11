@@ -1,7 +1,7 @@
 import os, hashlib
 
 
-def GenerateHash(Model=None):
+def GenerateHash(Model=None) -> str:
     hash = hashlib.md5(os.urandom(64)).hexdigest()
 
     if Model is not None:

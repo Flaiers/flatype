@@ -25,11 +25,12 @@ def create_new(request):
 def viewing(request, slug: str):
     try:
         article = Article.objects.get(slug=slug)
-    except:
+    except Exception:
         return render(request, 'exceptions/404.html', status=404)
 
     owner_hash = request.session.get('externalid')
-    if request.GET.get('edit', False) and (request.user == article.owner or owner_hash == article.owner_hash):
+    if request.GET.get('edit', False) and \
+            (request.user == article.owner or owner_hash == article.owner_hash):
 
         if request.method == 'POST':
 
@@ -51,7 +52,7 @@ def viewing(request, slug: str):
     })
 
 
-class Exceptions():
+class Exceptions:
 
     def __init__(self):
         return

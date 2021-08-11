@@ -18,7 +18,13 @@ from django.http import JsonResponse
 def try_register(request) -> JsonResponse:
     form = UserCreationForm(request.POST)
     if not form.is_valid():
-        return JsonResponse({'error': True, 'data': 'Form data is not valid'}, status=422)
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'Form data is not valid'
+            },
+            status=422
+        )
 
     user = form.save(commit=False)
     user.first_name = request.POST.get('first_name', '')
@@ -35,7 +41,9 @@ def try_register(request) -> JsonResponse:
             article.save()
 
     login(request, user)
-    return JsonResponse({'data': 'ok'})
+    return JsonResponse({
+        'data': 'ok'
+    })
 
 
 @csrf_exempt
@@ -43,33 +51,67 @@ def try_register(request) -> JsonResponse:
 def try_login(request) -> JsonResponse:
     form = AuthenticationForm(data=request.POST)
     if not form.is_valid():
-        return JsonResponse({'error': True, 'data': 'Form data is not valid'}, status=422)
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'Form data is not valid'
+            },
+            status=422
+        )
 
     if request.user.is_authenticated:
-        return JsonResponse({'error': True, 'data': 'User already authenticated'}, status=409)
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'User already authenticated'
+            },
+            status=409
+        )
 
     username = request.POST.get('username')
     password = request.POST.get('password')
 
     user = authenticate(request, username=username, password=password)
     if user is None:
-        return JsonResponse({'error': True, 'data': 'User not found'}, status=404)
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'User not found'
+            },
+            status=404
+        )
 
     if not user.is_active:
-        return JsonResponse({'error': True, 'data': 'User is locked'}, status=423)
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'User is locked'
+            },
+            status=423
+        )
 
     login(request, user)
-    return JsonResponse({'data': 'ok'})
+    return JsonResponse({
+        'data': 'ok'
+    })
 
 
 @csrf_exempt
 @require_http_methods(["POST"])
 def try_logout(request) -> JsonResponse:
     if not request.user.is_authenticated:
-        return JsonResponse({'error': True, 'data': 'User is not authenticated'}, status=401)
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'User is not authenticated'
+            },
+            status=401
+        )
 
     logout(request)
-    return JsonResponse({'data': 'ok'})
+    return JsonResponse({
+        'data': 'ok'
+    })
 
 
 @csrf_exempt
@@ -80,7 +122,13 @@ def try_save(request, form=None, external=False):
         external = True
 
         if not form.is_valid():
-            return JsonResponse({'error': True, 'data': 'Form data is not valid'}, status=422)
+            return JsonResponse(
+                {
+                    'error': True,
+                    'data': 'Form data is not valid'
+                },
+                status=422
+            )
 
     article = form.save(commit=False)
 
@@ -99,7 +147,9 @@ def try_save(request, form=None, external=False):
     article.save()
 
     if external:
-        return JsonResponse({'data': f"http://{request.headers['Host']}/{article.slug}"})
+        return JsonResponse({
+            'data': f"https://{request.headers['Host']}/{article.slug}"
+        })
 
     return article
 
@@ -114,15 +164,33 @@ def try_edit(request, article=None, external=False):
             article = Article.objects.get(slug=request.POST.get('article'))
 
             if not (request.user == article.owner or owner_hash == article.owner_hash):
-                return JsonResponse({'error': True, 'data': 'Forbidden'}, status=403)
+                return JsonResponse(
+                    {
+                        'error': True,
+                        'data': 'Forbidden'
+                    },
+                    status=403
+                )
 
             form = ArticleForm(request.POST)
             if not form.is_valid():
-                return JsonResponse({'error': True, 'data': 'Form data is not valid'}, status=422)
+                return JsonResponse(
+                    {
+                        'error': True,
+                        'data': 'Form data is not valid'
+                    },
+                    status=422
+                )
 
             external = True
-        except:
-            return JsonResponse({'error': True, 'data': 'Article not found'}, status=404)
+        except Exception:
+            return JsonResponse(
+                {
+                    'error': True,
+                    'data': 'Article not found'
+                },
+                status=404
+            )
 
     article.title = request.POST.get('title')
 
@@ -136,6 +204,8 @@ def try_edit(request, article=None, external=False):
     article.save()
 
     if external:
-        return JsonResponse({'data': 'ok'})
+        return JsonResponse({
+            'data': 'ok'
+        })
 
     return article
