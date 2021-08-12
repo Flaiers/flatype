@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 
 services:
   nginx:
@@ -21,8 +21,6 @@ services:
     restart: always
     ports:
       - 5432:5432
-    env_file:
-      - .env
     volumes:
       - /usr/projects/psql/flatype_db:/var/lib/psql/data
     environment:
@@ -43,4 +41,4 @@ services:
     volumes:
       - .:/usr/projects/flatype
     environment:
-      - LEVEL=PRODUCTION
+      - LEVEL
