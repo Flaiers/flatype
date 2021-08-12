@@ -25,10 +25,10 @@ class Article(models.Model):
             self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w)for w in self.title.lower())) + \
                         self.date.strftime('-%m-%d')
         try:
-            super(Article, self).save(*args, **kwargs)
+            super(type(self), self).save(*args, **kwargs)
         except IntegrityError:
             exists_slug = []
-            articles = Article.objects.all()
+            articles = type(self).objects.all()
             [exists_slug.append(article.slug) if self.slug in article.slug else None for article in articles]
             if len(exists_slug) != 1:
                 number = [int(exist_slug.split('-')[-1]) for exist_slug in exists_slug][-1] + 1
@@ -36,4 +36,4 @@ class Article(models.Model):
             else:
                 self.slug += '-2'
 
-            super(Article, self).save(*args, **kwargs)
+            super(type(self), self).save(*args, **kwargs)

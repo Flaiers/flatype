@@ -5,6 +5,7 @@ read -p "----------------------
 | Python interpreter |
 ----------------------
 Default: /usr/bin/python3
+(Сlick Enter for choose default)
 If you wont to change, write: " python_interpreter
 
 
@@ -15,7 +16,7 @@ else
 fi
 
 source env/bin/activate
-pip install -U pip && pip install --no-cache-dir -r requirements.txt
+pip install -U pip && pip install -r requirements.txt
 
 cd src/
 
