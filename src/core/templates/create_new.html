@@ -1,9 +1,77 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="button publish_button">Publish</button>
-</form>
+<div class="tl_page_wrap">
+  <div class="tl_page">
+    <main class="tl_article tl_article_editable tl_article_edit">
+      <article id="_tl_editor" class="tl_article_content ql-container">
+        <div class="ql-editor" contenteditable="true" dir="auto"><!--
+       --><h1 data-placeholder="Title" data-label="Title" class="">123</h1><!--
+       --><address data-placeholder="Your name" data-label="Author">123</address><!--
+       --><p data-placeholder="Your story..." class="">123</p><!--
+     --></div><!--
+     --><div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+        <div id="_tl_link_tooltip" class="tl_link_tooltip bottom" style="left: -41px; top: 108px;"></div>
+        <div id="_tl_tooltip" class="tl_tooltip" style="left: -66px; top: -8px;">
+          <div class="buttons">
+            <span class="button_hover"></span>
+            <span class="button_group"><!--
+           --><button id="_bold_button" class="disabled"></button><!--
+           --><button id="_italic_button" class="disabled"></button><!--
+           --><button id="_link_button" class="active"></button><!--
+         --></span><!--
+         --><span class="button_group"><!--
+           --><button id="_header_button" class="disabled"></button><!--
+           --><button id="_subheader_button" class="disabled"></button><!--
+           --><button id="_quote_button" class="disabled"></button><!--
+         --></span>
+          </div>
+          <div class="prompt">
+            <span class="close"></span>
+            <div class="prompt_input_wrap"><input type="url" class="prompt_input"></div>
+          </div>
+        </div>
+        <div id="_tl_blocks" class="tl_blocks" style="top: 90px;">
+          <div class="buttons">
+            <button id="_image_button"></button><!--
+         --><button id="_embed_button"></button>
+          </div>
+        </div>
+      </article>
+      <aside class="tl_article_buttons">
+        <div class="account account_top">👤 {{ request.user }}</div>
+        <button id="_edit_button" class="button edit_button">Edit</button><!--
+     --><button id="_publish_button" class="button publish_button">Publish</button>
+        <div class="account account_bottom">👤 {{ request.user }}</div>
+        <div id="_error_msg" class="error_msg"></div>
+      </aside>
+    </main>
+  </div>
+</div>
+<div id="_tl_alerts" class="tl_alerts"></div>
+<script>
+  var T = {
+    apiUrl: "https://edit.telegra.ph",
+    datetime: 1627905585,
+    pageId: "ecdb6b388f1b3aff38110",
+  };
+  (function () {
+    var b = document.querySelector("time");
+    if (b && T.datetime) {
+      var a = new Date(1e3 * T.datetime),
+        d =
+          "January February March April May June July August September October November December".split(
+            " "
+          )[a.getMonth()],
+        c = a.getDate();
+      b.innerText = d + " " + (10 > c ? "0" : "") + c + ", " + a.getFullYear();
+    }
+  })();
+</script>
+<script src="https://telegra.ph/js/jquery.min.js"></script>
+<script src="https://telegra.ph/js/jquery.selection.min.js"></script>
+<script src="https://telegra.ph/js/autosize.min.js"></script>
+<script src="https://telegra.ph/js/load-image.all.min.js"></script>
+<script src="https://telegra.ph/js/quill.min.js"></script>
+<script src="/static/js/core.min.js"></script>
 {% endblock %}
