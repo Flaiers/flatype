@@ -9,21 +9,21 @@
        --><h1 data-placeholder="Title" data-label="Title" class="">123</h1><!--
        --><address data-placeholder="Your name" data-label="Author">123</address><!--
        --><p data-placeholder="Your story..." class="">123</p><!--
-     --></div><!--
-     --><div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
+     --></div>
+        <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
         <div id="_tl_link_tooltip" class="tl_link_tooltip bottom" style="left: -41px; top: 108px;"></div>
         <div id="_tl_tooltip" class="tl_tooltip" style="left: -66px; top: -8px;">
           <div class="buttons">
             <span class="button_hover"></span>
             <span class="button_group"><!--
-           --><button id="_bold_button" class="disabled"></button><!--
-           --><button id="_italic_button" class="disabled"></button><!--
-           --><button id="_link_button" class="active"></button><!--
+           --><button id="_bold_button"></button><!--
+           --><button id="_italic_button"></button><!--
+           --><button id="_link_button"></button><!--
          --></span><!--
          --><span class="button_group"><!--
-           --><button id="_header_button" class="disabled"></button><!--
-           --><button id="_subheader_button" class="disabled"></button><!--
-           --><button id="_quote_button" class="disabled"></button><!--
+           --><button id="_header_button"></button><!--
+           --><button id="_subheader_button"></button><!--
+           --><button id="_quote_button"></button><!--
          --></span>
           </div>
           <div class="prompt">
@@ -49,25 +49,7 @@
   </div>
 </div>
 <div id="_tl_alerts" class="tl_alerts"></div>
-<script>
-  var T = {
-    apiUrl: "https://edit.telegra.ph",
-    datetime: 1627905585,
-    pageId: "ecdb6b388f1b3aff38110",
-  };
-  (function () {
-    var b = document.querySelector("time");
-    if (b && T.datetime) {
-      var a = new Date(1e3 * T.datetime),
-        d =
-          "January February March April May June July August September October November December".split(
-            " "
-          )[a.getMonth()],
-        c = a.getDate();
-      b.innerText = d + " " + (10 > c ? "0" : "") + c + ", " + a.getFullYear();
-    }
-  })();
-</script>
+<script>var T={apiUrl:"https://edit.telegra.ph",datetime:0,pageId:"ecdb6b388f1b3aff38110",};</script>
 <script src="https://telegra.ph/js/jquery.min.js"></script>
 <script src="https://telegra.ph/js/jquery.selection.min.js"></script>
 <script src="https://telegra.ph/js/autosize.min.js"></script>
