@@ -213,8 +213,7 @@ def try_edit(request, article=None, external=False):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def try_upload(request):
-    body = request.body
+def try_upload(request) -> JsonResponse:
     form = StorageForm(request.POST, request.FILES)
     if not form.is_valid():
         return JsonResponse(
@@ -227,12 +226,15 @@ def try_upload(request):
 
     file = request.FILES.get('file')
     instance = Storage(file=file)
-    instance.save(type=file.content_type.split('/')[-1], bytes=body)
+    object = instance.save(type=file.content_type.split('/')[-1], bytes=file.read())
+
+    if object is None:
+        object = instance
 
     return JsonResponse(
         [
             {
-                'src': f'/media/{instance}'
+                'src': f'/media/{object}'
             }
         ],
         safe=False

@@ -24,7 +24,7 @@ class Article(models.Model):
 
     def __str__(self) -> str: return self.slug
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w)for w in self.title.lower())) + \
                         self.date.strftime('-%m-%d')
@@ -50,8 +50,11 @@ class Storage(models.Model):
 
     def __str__(self) -> str: return str(self.file)
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args, **kwargs):
         self.hash = GenerateDataHash(type(self), kwargs.get('bytes'))
+        if type(self.hash) is bytes:
+            return self.hash.decode()
+
         self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
         super(type(self), self).save()
 

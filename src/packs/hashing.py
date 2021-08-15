@@ -22,9 +22,6 @@ def GenerateDataHash(Model=None, data=None) -> str:
     if Model is not None:
         hash_exist = Model.objects.filter(hash=hash)
 
-        while hash_exist:
-            hash = hashlib.sha256(data).hexdigest()
-            hash_exist = Model.objects.filter(hash=hash)
-            continue
+    hash = str(hash_exist.first()).encode() if hash_exist else hash
 
     return hash
