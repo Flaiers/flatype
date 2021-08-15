@@ -1,11 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-from core.models import Article
-from core.forms import ArticleForm
+from core.models import Article, Storage
+from core.forms import ArticleForm, StorageForm
 
 from ext_auth.models import ExternalHashId
 
-from packs.hashing import GenerateHash
+from packs.hashing import GenerateRandomHash
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
@@ -141,7 +141,7 @@ def try_save(request, form=None, external=False):
         if owner_hash := request.session.get('externalid'):
             article.owner_hash = owner_hash
         else:
-            article.owner_hash = GenerateHash(Article)
+            article.owner_hash = GenerateRandomHash(Article)
             request.session['externalid'] = article.owner_hash
 
     article.save()
@@ -209,3 +209,33 @@ def try_edit(request, article=None, external=False):
         })
 
     return article
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def try_upload(request) -> JsonResponse:
+    form = StorageForm(request.POST, request.FILES)
+    if not form.is_valid():
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'Form data is not valid'
+            },
+            status=422
+        )
+
+    file = request.FILES.get('file')
+    instance = Storage(file=file)
+    object = instance.save(type=file.content_type.split('/')[-1], bytes=file.read())
+
+    if object is None:
+        object = instance
+
+    return JsonResponse(
+        [
+            {
+                'src': f'/media/{object}'
+            }
+        ],
+        safe=False
+    )

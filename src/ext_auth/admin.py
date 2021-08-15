@@ -13,7 +13,7 @@ class SessionAdmin(admin.ModelAdmin):
     def get_session_data(self, obj): return obj.get_decoded()
     get_session_data.short_description = 'session data'
 
-    list_display = ['session_key', 'get_session_data', 'expire_date']
+    list_display = ('session_key', 'get_session_data', 'expire_date',)
 
 
 class ExternalHashIdInline(admin.TabularInline):

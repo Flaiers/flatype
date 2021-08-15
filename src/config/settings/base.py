@@ -1,10 +1,6 @@
 import os
 import environ
 
-env = environ.Env(
-    DEBUG=(bool, True)
-)
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = environ.Path(__file__) - 4
 
@@ -15,12 +11,12 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+ALLOWED_HOSTS = list(os.environ.get('ALLOWED_HOSTS'))
 
 
 # Application definition
@@ -90,15 +86,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = env('LANGUAGE_CODE')
+LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE')
 
-TIME_ZONE = env('TIME_ZONE')
+TIME_ZONE = os.environ.get('TIME_ZONE')
 
-USE_I18N = env('USE_I18N')
+USE_I18N = os.environ.get('USE_I18N')
 
-USE_L10N = env('USE_L10N')
+USE_L10N = os.environ.get('USE_L10N')
 
-USE_TZ = env('USE_TZ')
+USE_TZ = os.environ.get('USE_TZ')
 
 
 # Static files (CSS, JavaScript, Images)
@@ -115,7 +111,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ALPHABET = env('ALPHABET')
+ALPHABET = os.environ.get('ALPHABET')
 
 # SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = ''
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 251658240
+FILE_UPLOAD_MAX_MEMORY_SIZE = 251658240
