@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Article
+from .models import Article, Storage
 
 
 @admin.register(Article)
@@ -14,3 +14,10 @@ class ArticleAdmin(admin.ModelAdmin):
         if obj:
             return self.readonly_fields + ('slug', 'owner', 'date',)
         return self.readonly_fields
+
+
+@admin.register(Storage)
+class StorageAdmin(admin.ModelAdmin):
+    fields = ('data', 'file',)
+    list_display = ('data',)
+    search_fields = ('data',)

@@ -2,23 +2,25 @@ from datetime import date
 from django.conf import settings
 from django.utils.text import slugify
 
-from django.db import models
-from django.contrib.auth.models import User
-
 from django.db.utils import IntegrityError
+
+from django.db import models
+from django.contrib.auth import get_user_model
+
+
+UserModel = get_user_model()
 
 
 class Article(models.Model):
     title = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, db_index=True)
     author = models.CharField(max_length=64, null=True, blank=True)
-    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserModel, null=True, blank=True, on_delete=models.CASCADE)
     owner_hash = models.CharField(max_length=32, null=True, blank=True)
     text = models.TextField()
     date = models.DateField(default=date.today)
 
-    def __str__(self) -> str:
-        return self.slug
+    def __str__(self) -> str: return self.slug
 
     def save(self, *args, **kwargs) -> None:
         if not self.slug:
@@ -37,3 +39,15 @@ class Article(models.Model):
                 self.slug += '-2'
 
             super(type(self), self).save(*args, **kwargs)
+
+
+class Storage(models.Model):
+    data = models.TextField()
+    file = models.FileField(blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.data
+
+    class Meta:
+        verbose_name = "Storage object"
+        verbose_name_plural = "Storage"
