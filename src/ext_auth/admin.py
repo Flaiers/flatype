@@ -5,11 +5,12 @@ from django.contrib.sessions.models import Session
 from django.contrib.auth import get_user_model, admin as auth_admin
 
 
-actual_user_model = get_user_model()
+UserModel = get_user_model()
 
 
+@admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
-    get_session_data = lambda self, obj: obj.get_decoded()
+    def get_session_data(self, obj): return obj.get_decoded()
     get_session_data.short_description = 'session data'
 
     list_display = ['session_key', 'get_session_data', 'expire_date']
@@ -27,8 +28,6 @@ class UserAdmin(auth_admin.UserAdmin):
     ]
 
 
-admin.site.unregister(actual_user_model)
-admin.site.register(actual_user_model, UserAdmin)
-admin.site.register(Session, SessionAdmin)
-
+admin.site.unregister(UserModel)
+admin.site.register(UserModel, UserAdmin)
 admin.register(ExternalHashId)
