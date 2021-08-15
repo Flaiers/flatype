@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-from core.models import Article
-from core.forms import ArticleForm
+from core.models import Article, Storage
+from core.forms import ArticleForm, StorageForm
 
 from ext_auth.models import ExternalHashId
 
@@ -209,3 +209,30 @@ def try_edit(request, article=None, external=False):
         })
 
     return article
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def try_upload(request):
+    form = StorageForm(request.POST, request.FILES)
+    if not form.is_valid():
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'Form data is not valid'
+            },
+            status=422
+        )
+
+    file = request.FILES.get('file')
+    instance = Storage(file=file)
+    instance.save(file.content_type.split('/')[-1])
+
+    return JsonResponse(
+        [
+            {
+                'src': f'/media/{instance}'
+            }
+        ],
+        safe=False
+    )
