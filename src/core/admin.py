@@ -18,6 +18,12 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Storage)
 class StorageAdmin(admin.ModelAdmin):
-    fields = ('data', 'file',)
-    list_display = ('data',)
-    search_fields = ('data',)
+    fields = ('file', 'date',)
+    list_display = ('file', 'date',)
+    search_fields = ('file', 'date',)
+    date_hierarchy = 'date'
+
+    def get_readonly_fields(self, request, obj=None) -> tuple:
+        if obj:
+            return self.readonly_fields + ('file', 'date',)
+        return self.readonly_fields

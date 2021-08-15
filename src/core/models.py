@@ -1,3 +1,5 @@
+from packs.hashing import GenerateHash
+
 from datetime import date
 from django.conf import settings
 from django.utils.text import slugify
@@ -42,11 +44,16 @@ class Article(models.Model):
 
 
 class Storage(models.Model):
-    data = models.TextField()
-    file = models.FileField(blank=True, null=True)
+    file = models.FileField()
+    date = models.DateField(default=date.today)
 
-    def __str__(self) -> str:
-        return self.data
+    def __str__(self) -> str: return str(self.file)
+
+    def save(self, *args, **kwargs) -> None:
+        name = str(self.file).split('.')
+        name[0] = GenerateHash()
+        self.file.name = '.'.join(name)
+        super(type(self), self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Storage object"
