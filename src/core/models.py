@@ -1,4 +1,4 @@
-from packs.hashing import GenerateHash
+from packs.hashing import GenerateDataHash
 
 from datetime import date
 from django.conf import settings
@@ -44,16 +44,16 @@ class Article(models.Model):
 
 
 class Storage(models.Model):
-    hash = models.CharField(max_length=32, unique=True, db_index=True, blank=True)
+    hash = models.CharField(max_length=255, unique=True, db_index=True, blank=True)
     file = models.FileField(unique=True, db_index=True)
     date = models.DateField(default=date.today)
 
     def __str__(self) -> str: return str(self.file)
 
     def save(self, *args, **kwargs) -> None:
-        self.hash = GenerateHash(type(self))
-        self.file.name = f'{self.hash}.{args}'
-        super(type(self), self).save(*args, **kwargs)
+        self.hash = GenerateDataHash(type(self), kwargs.get('bytes'))
+        self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
+        super(type(self), self).save()
 
     class Meta:
         verbose_name = "Storage object"
