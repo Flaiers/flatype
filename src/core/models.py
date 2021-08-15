@@ -44,14 +44,16 @@ class Article(models.Model):
 
 
 class Storage(models.Model):
-    file = models.FileField()
+    hash = models.CharField(max_length=32, unique=True, db_index=True, blank=True)
+    file = models.FileField(unique=True, db_index=True)
     date = models.DateField(default=date.today)
 
     def __str__(self) -> str: return str(self.file)
 
     def save(self, *args, **kwargs) -> None:
-        name = str(self.file).split('.')
-        name[0] = GenerateHash()
+        self.hash = GenerateHash(type(self))
+        name = self.file.name.split('.')
+        name[0] = self.hash
         self.file.name = '.'.join(name)
         super(type(self), self).save(*args, **kwargs)
 
