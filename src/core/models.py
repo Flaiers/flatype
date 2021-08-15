@@ -52,9 +52,7 @@ class Storage(models.Model):
 
     def save(self, *args, **kwargs) -> None:
         self.hash = GenerateHash(type(self))
-        name = self.file.name.split('.')
-        name[0] = self.hash
-        self.file.name = '.'.join(name)
+        self.file.name = f'{self.hash}.{args}'
         super(type(self), self).save(*args, **kwargs)
 
     class Meta:
