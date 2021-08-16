@@ -28,7 +28,7 @@ class Create(TemplateView):
             article = try_save(request, form)
 
             return redirect(
-                'viewing',
+                'view',
                 slug=article.slug
             )
 
@@ -51,11 +51,11 @@ class View(TemplateView):
 
             form = ArticleForm(instance=article)
 
-            return render(request, 'writing.html', {'form': form})
+            return render(request, 'write.html', {'form': form})
 
         return render(
             request,
-            'viewing.html',
+            'view.html',
             {
                 'article': article,
                 'owner_hash': owner_hash,
