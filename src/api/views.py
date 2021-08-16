@@ -48,19 +48,20 @@ def try_register(request) -> JsonResponse:
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def try_save(request, form=None, external=False):
-    if form is None:
-        form = ArticleForm(request.POST)
-        external = True
+def try_save(request):
+    post = request.POST.copy()
+    post['text'] = request.FILES.get('Data').read().decode()
 
-        if not form.is_valid():
-            return JsonResponse(
-                {
-                    'error': True,
-                    'data': 'Form data is not valid'
-                },
-                status=422
-            )
+    form = ArticleForm(request.POST)
+
+    if not form.is_valid():
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'Form data is not valid'
+            },
+            status=422
+        )
 
     article = form.save(commit=False)
 
@@ -78,12 +79,9 @@ def try_save(request, form=None, external=False):
 
     article.save()
 
-    if external:
-        return JsonResponse({
-            'data': f"https://{request.headers['Host']}/{article.slug}"
-        })
-
-    return article
+    return JsonResponse({
+        'path': article.slug
+    })
 
 
 @csrf_exempt

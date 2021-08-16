@@ -1,4 +1,4 @@
-from api.views import try_save, try_edit
+from api.views import try_edit
 
 from .models import Article
 from .forms import ArticleForm
@@ -11,29 +11,10 @@ from django.views.decorators.csrf import requires_csrf_token
 class Create(TemplateView):
 
     def get(self, request, *args, **kwargs):
-        form = ArticleForm()
-
         return render(
             request,
-            'create.html',
-            {
-                'form': form
-            }
+            'create.html'
         )
-
-    def post(self, request, *args, **kwargs):
-        post = request.POST.copy()
-        post['text'] = request.FILES.get('Data').read().decode()
-
-        form = ArticleForm(post)
-
-        if form.is_valid():
-            article = try_save(request, form)
-
-            return redirect(
-                'view',
-                slug=article.slug
-            )
 
 
 class View(TemplateView):
@@ -89,21 +70,18 @@ class View(TemplateView):
 
 class Exceptions:
 
-    def __init__(self):
-        return
-
     @requires_csrf_token
-    def bad_request(self, request, exception) -> render:
+    def bad_request(self, request, exception):
         return render(request, 'exceptions/400.html', status=400)
 
     @requires_csrf_token
-    def permission_denied(self, request, exception) -> render:
+    def permission_denied(self, request, exception):
         return render(request, 'exceptions/403.html', status=403)
 
     @requires_csrf_token
-    def page_not_found(self, request, exception) -> render:
+    def page_not_found(self, request, exception):
         return render(request, 'exceptions/404.html', status=404)
 
     @requires_csrf_token
-    def server_error(self, request) -> render:
+    def server_error(self, request):
         return render(request, 'exceptions/500.html', status=500)
