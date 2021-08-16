@@ -338,13 +338,13 @@ body.mobile .button_hover {
 .buttons button:after,
 .buttons button:before,
 .tl_blocks .buttons button {
-  background: url(https://telegra.ph/images/icons.png?1) -8px 26px no-repeat;
+  background: url(/static/img/icons.png?1) -8px 26px no-repeat;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .buttons button:after,
   .buttons button:before,
   .tl_blocks .buttons button {
-    background-image: url(https://telegra.ph/images/icons_2x.png?1);
+    background-image: url(/static/img/icons_2x.png?1);
     background-size: 40px 487px;
   }
 }
