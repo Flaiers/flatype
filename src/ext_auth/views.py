@@ -10,12 +10,17 @@ from django.http import JsonResponse
 @csrf_exempt
 def try_check(request) -> JsonResponse:
     data = {
-        'author_name': "👤 root",
-        'author_url': "https://t.me/Flaiers",
+        'author_name': 'AnonymousUser',
+        'author_url': '',
         'can_edit': False,
-        'save_hash': "a5d4ee18d2eaf08993317a0723d65a0488d4",
-        'short_name': "👤 root"
+        'save_hash': '',
+        'short_name': '👤 AnonymousUser'
     }
+
+    if request.user.is_authenticated:
+        data['author_name'] = str(request.user)
+        data['author_url'] = '#'
+        data['short_name'] = f'👤 {request.user}'
 
     return JsonResponse(data)
 
