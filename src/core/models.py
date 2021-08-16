@@ -51,12 +51,13 @@ class Storage(models.Model):
     def __str__(self) -> str: return str(self.file)
 
     def save(self, *args, **kwargs):
-        self.hash = GenerateDataHash(type(self), kwargs.get('bytes'))
+        self.hash = GenerateDataHash(kwargs.get('bytes'), type(self))
         if type(self.hash) is bytes:
             return self.hash.decode()
 
         self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
         super(type(self), self).save()
+
 
     class Meta:
         verbose_name = "Storage object"

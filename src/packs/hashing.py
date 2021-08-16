@@ -16,7 +16,7 @@ def GenerateRandomHash(Model=None) -> str:
     return hash
 
 
-def GenerateDataHash(Model=None, data=None) -> str:
+def GenerateDataHash(data=None, Model=None) -> str:
     hash = hashlib.sha256(data).hexdigest()
 
     if Model is not None:

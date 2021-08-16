@@ -228,8 +228,7 @@ def try_upload(request) -> JsonResponse:
     instance = Storage(file=file)
     object = instance.save(type=file.content_type.split('/')[-1], bytes=file.read())
 
-    if object is None:
-        object = instance
+    object = instance if object is None else object
 
     return JsonResponse(
         [
