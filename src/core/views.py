@@ -22,7 +22,10 @@ class Create(TemplateView):
         )
 
     def post(self, request, *args, **kwargs):
-        form = ArticleForm(request.POST)
+        post = request.POST.copy()
+        post['text'] = request.FILES.get('Data').read().decode()
+
+        form = ArticleForm(post)
 
         if form.is_valid():
             article = try_save(request, form)
