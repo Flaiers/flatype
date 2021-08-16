@@ -1,4 +1,4 @@
-from .base import env
+import os
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -6,10 +6,10 @@ from .base import env
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('POSTGRES_DB'),
-        'USER': env('POSTGRES_USER'),
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'HOST': env('HOST'),
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('HOST'),
         'PORT': 5432,
     }
 }
