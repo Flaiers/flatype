@@ -52,7 +52,7 @@ def try_save(request):
     post = request.POST.copy()
     post['text'] = request.FILES.get('Data').read().decode()
 
-    form = ArticleForm(request.POST)
+    form = ArticleForm(post)
 
     if not form.is_valid():
         return JsonResponse(
