@@ -1,26 +1,30 @@
+from packs.hashing import GenerateDataHash
+
 from datetime import date
 from django.conf import settings
 from django.utils.text import slugify
 
-from django.db import models
-from django.contrib.auth.models import User
-
 from django.db.utils import IntegrityError
+
+from django.db import models
+from django.contrib.auth import get_user_model
+
+
+UserModel = get_user_model()
 
 
 class Article(models.Model):
     title = models.CharField(max_length=150)
-    slug = models.SlugField(unique=True, db_index=True)
+    slug = models.SlugField(unique=True, db_index=True, blank=True)
     author = models.CharField(max_length=64, null=True, blank=True)
-    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserModel, null=True, blank=True, on_delete=models.CASCADE)
     owner_hash = models.CharField(max_length=32, null=True, blank=True)
     text = models.TextField()
     date = models.DateField(default=date.today)
 
-    def __str__(self) -> str:
-        return self.slug
+    def __str__(self) -> str: return self.slug
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w)for w in self.title.lower())) + \
                         self.date.strftime('-%m-%d')
@@ -37,3 +41,24 @@ class Article(models.Model):
                 self.slug += '-2'
 
             super(type(self), self).save(*args, **kwargs)
+
+
+class Storage(models.Model):
+    hash = models.CharField(max_length=255, unique=True, db_index=True, blank=True)
+    file = models.FileField(unique=True, db_index=True)
+    date = models.DateField(default=date.today)
+
+    def __str__(self) -> str: return str(self.file)
+
+    def save(self, *args, **kwargs):
+        self.hash = GenerateDataHash(kwargs.get('bytes'), type(self))
+        if type(self.hash) is bytes:
+            return self.hash.decode()
+
+        self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
+        super(type(self), self).save()
+
+
+    class Meta:
+        verbose_name = "Storage object"
+        verbose_name_plural = "Storage"

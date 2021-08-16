@@ -1,14 +1,14 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 
-from core.models import Article
-from core.forms import ArticleForm
+from core.models import Article, Storage
+from core.forms import ArticleForm, StorageForm
 
 from ext_auth.models import ExternalHashId
 
-from packs.hashing import GenerateHash
+from packs.hashing import GenerateRandomHash
 
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
@@ -48,8 +48,12 @@ def try_register(request) -> JsonResponse:
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def try_login(request) -> JsonResponse:
-    form = AuthenticationForm(data=request.POST)
+def try_save(request):
+    post = request.POST.copy()
+    post['text'] = request.FILES.get('Data').read().decode()
+
+    form = ArticleForm(post)
+
     if not form.is_valid():
         return JsonResponse(
             {
@@ -58,77 +62,6 @@ def try_login(request) -> JsonResponse:
             },
             status=422
         )
-
-    if request.user.is_authenticated:
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'User already authenticated'
-            },
-            status=409
-        )
-
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-
-    user = authenticate(request, username=username, password=password)
-    if user is None:
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'User not found'
-            },
-            status=404
-        )
-
-    if not user.is_active:
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'User is locked'
-            },
-            status=423
-        )
-
-    login(request, user)
-    return JsonResponse({
-        'data': 'ok'
-    })
-
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def try_logout(request) -> JsonResponse:
-    if not request.user.is_authenticated:
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'User is not authenticated'
-            },
-            status=401
-        )
-
-    logout(request)
-    return JsonResponse({
-        'data': 'ok'
-    })
-
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def try_save(request, form=None, external=False):
-    if form is None:
-        form = ArticleForm(request.POST)
-        external = True
-
-        if not form.is_valid():
-            return JsonResponse(
-                {
-                    'error': True,
-                    'data': 'Form data is not valid'
-                },
-                status=422
-            )
 
     article = form.save(commit=False)
 
@@ -141,17 +74,14 @@ def try_save(request, form=None, external=False):
         if owner_hash := request.session.get('externalid'):
             article.owner_hash = owner_hash
         else:
-            article.owner_hash = GenerateHash(Article)
+            article.owner_hash = GenerateRandomHash(Article)
             request.session['externalid'] = article.owner_hash
 
     article.save()
 
-    if external:
-        return JsonResponse({
-            'data': f"https://{request.headers['Host']}/{article.slug}"
-        })
-
-    return article
+    return JsonResponse({
+        'path': article.slug
+    })
 
 
 @csrf_exempt
@@ -209,3 +139,32 @@ def try_edit(request, article=None, external=False):
         })
 
     return article
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def try_upload(request) -> JsonResponse:
+    form = StorageForm(request.POST, request.FILES)
+    if not form.is_valid():
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'Form data is not valid'
+            },
+            status=422
+        )
+
+    file = request.FILES.get('file')
+    instance = Storage(file=file)
+    object = instance.save(type=file.content_type.split('/')[-1], bytes=file.read())
+
+    object = instance if object is None else object
+
+    return JsonResponse(
+        [
+            {
+                'src': f'/media/{object}'
+            }
+        ],
+        safe=False
+    )
