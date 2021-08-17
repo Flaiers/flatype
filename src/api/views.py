@@ -46,7 +46,6 @@ def try_register(request) -> JsonResponse:
     })
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def try_save(request):
     post = request.POST.copy()
@@ -84,7 +83,6 @@ def try_save(request):
     })
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def try_edit(request, article=None, external=False):
     owner_hash = request.session.get('externalid')
@@ -141,7 +139,6 @@ def try_edit(request, article=None, external=False):
     return article
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
 def try_upload(request) -> JsonResponse:
     form = StorageForm(request.POST, request.FILES)
