@@ -9,3 +9,4 @@ sqlparse
 zope.interface
 requests
 psycopg2
+django-debug-toolbar

@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'api.apps.ApiConfig',
     'core.apps.CoreConfig',
     'ext_auth.apps.ExtAuthConfig',
@@ -39,6 +40,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -118,3 +120,7 @@ SESSION_COOKIE_SAMESITE = ''
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 251658240
 FILE_UPLOAD_MAX_MEMORY_SIZE = 251658240
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
