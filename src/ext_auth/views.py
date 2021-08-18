@@ -7,7 +7,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 
-@csrf_exempt
 def try_check(request) -> JsonResponse:
 
     return JsonResponse({
@@ -69,7 +68,6 @@ def try_login(request) -> JsonResponse:
     })
 
 
-@csrf_exempt
 def try_logout(request) -> JsonResponse:
     if not request.user.is_authenticated:
         return JsonResponse(

@@ -18,7 +18,7 @@
             <h1 dir="auto"></h1>
             <address dir="auto">
               <a rel="author"></a><!--
-          --><time datetime=""></time>
+           --><time datetime=""></time>
             </address>
           </header>
           <article id="_tl_editor" class="tl_article_content ql-container">
@@ -51,14 +51,14 @@
             <div id="_tl_blocks" class="tl_blocks">
               <div class="buttons">
                 <button id="_image_button"></button><!--
-            --><button id="_embed_button"></button>
+             --><button id="_embed_button"></button>
               </div>
             </div>
           </article>
           <aside class="tl_article_buttons">
             <div class="account account_top"></div>
             <button id="_edit_button" class="button edit_button">Edit</button><!--
-        --><button id="_publish_button" class="button publish_button">Publish</button>
+         --><button id="_publish_button" class="button publish_button">Publish</button>
             <div class="account account_bottom"></div>
             <div id="_error_msg" class="error_msg"></div>
           </aside>
@@ -66,6 +66,7 @@
       </div>
     </div>
     <div id="_tl_alerts" class="tl_alerts"></div>
+    {% csrf_token %}
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/jquery.selection.min.js' %}"></script>
     <script src="{% static 'js/autosize.min.js' %}"></script>
