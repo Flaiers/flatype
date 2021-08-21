@@ -58,35 +58,12 @@ def try_save(request):
             },
             status=422
         )
+    
+    if slug := request.POST.get('save_hash') != '':
+        owner_hash = request.session.get('externalid')
 
-    article = form.save(commit=False)
-
-    if article.author is None:
-        article.author = request.user
-
-    if request.user.is_authenticated:
-        article.owner = request.user
-    else:
-        if owner_hash := request.session.get('externalid'):
-            article.owner_hash = owner_hash
-        else:
-            article.owner_hash = GenerateRandomHash(Article)
-            request.session['externalid'] = article.owner_hash
-
-    article.save()
-
-    return JsonResponse({
-        'path': article.slug
-    })
-
-
-@require_http_methods(["POST"])
-def try_edit(request, article=None, external=False):
-    owner_hash = request.session.get('externalid')
-
-    if article is None:
         try:
-            article = Article.objects.get(slug=request.POST.get('article'))
+            article = Article.objects.get(slug=slug)
 
             if not (request.user == article.owner or owner_hash == article.owner_hash):
                 return JsonResponse(
@@ -97,17 +74,6 @@ def try_edit(request, article=None, external=False):
                     status=403
                 )
 
-            form = ArticleForm(request.POST)
-            if not form.is_valid():
-                return JsonResponse(
-                    {
-                        'error': True,
-                        'data': 'Form data is not valid'
-                    },
-                    status=422
-                )
-
-            external = True
         except Exception:
             return JsonResponse(
                 {
@@ -117,23 +83,37 @@ def try_edit(request, article=None, external=False):
                 status=404
             )
 
-    article.title = request.POST.get('title')
+        article.title = request.POST.get('title')
 
-    if request.POST.get('author'):
-        article.author = request.POST.get('author')
+        if request.POST.get('author'):
+            article.author = request.POST.get('author')
 
-    if request.user.is_authenticated and owner_hash and article.owner is None:
-        article.owner = request.user
+        if request.user.is_authenticated and owner_hash and article.owner is None:
+            article.owner = request.user
 
-    article.text = request.POST.get('text')
-    article.save()
+        article.text = request.POST.get('text')
+        article.save()
 
-    if external:
-        return JsonResponse({
-            'data': 'ok'
-        })
+    else:
+        article = form.save(commit=False)
 
-    return article
+        if article.author is None:
+            article.author = request.user
+
+        if request.user.is_authenticated:
+            article.owner = request.user
+        else:
+            if owner_hash := request.session.get('externalid'):
+                article.owner_hash = owner_hash
+            else:
+                article.owner_hash = GenerateRandomHash(Article)
+                request.session['externalid'] = article.owner_hash
+
+        article.save()
+
+    return JsonResponse({
+        'path': article.slug
+    })
 
 
 @require_http_methods(["POST"])
