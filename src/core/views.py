@@ -4,6 +4,8 @@ from .models import Article
 from .forms import ArticleForm
 
 from .exceptions import page_not_found
+
+from django.utils.html import format_html
 from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 
@@ -36,6 +38,7 @@ class View(TemplateView):
             {
                 'article': article,
                 'owner_hash': owner_hash,
+                'content': format_html(article.text),
                 'date': article.date.strftime('%B %d, %Y'),
             }
         )
