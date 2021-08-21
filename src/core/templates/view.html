@@ -19,7 +19,7 @@
            --><time datetime="">{{ date }}</time>
             </address>
           </header>
-          <article id="_tl_editor" class="tl_article_content">{{ article.text }}</article>
+          <article id="_tl_editor" class="tl_article_content">{{ content }}</article>
           <div id="_tl_link_tooltip" class="tl_link_tooltip"></div>
           <div id="_tl_tooltip" class="tl_tooltip">
             <div class="buttons">
@@ -37,7 +37,7 @@
             </div>
             <div class="prompt">
               <span class="close"></span>
-              <div class="prompt_input_wrap"><input type="url" class="prompt_input"></div>
+              <div class="prompt_input_wrap"><input type="url" class="prompt_input" /></div>
             </div>
           </div>
           <div id="_tl_blocks" class="tl_blocks">
@@ -48,10 +48,8 @@
           </div>
           <aside class="tl_article_buttons">
             <div class="account account_top"></div>
-            {% if request.user == article.owner or owner_hash == article.owner_hash %}
-              <button id="_edit_button" class="button edit_button">Edit</button><!--
-           --><button id="_publish_button" class="button publish_button">Publish</button>
-            {% endif %}
+            <button id="_edit_button" class="button edit_button">Edit</button><!--
+         --><button id="_publish_button" class="button publish_button">Publish</button>
             <div class="account account_bottom"></div>
             <div id="_error_msg" class="error_msg"></div>
           </aside>
@@ -60,6 +58,7 @@
     </div>
     <div id="_tl_alerts" class="tl_alerts"></div>
     {% csrf_token %}
+    <script>var T = { pageId: location.pathname.replace('/', '') };</script>
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/jquery.selection.min.js' %}"></script>
     <script src="{% static 'js/autosize.min.js' %}"></script>
