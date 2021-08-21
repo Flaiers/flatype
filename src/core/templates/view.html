@@ -2,17 +2,13 @@
 
 {% block title %}{{ article.title }} – {% endblock %}
 
-{% block content %}
-<header class="tl_article_header">
-  <h1 dir="auto">{{ article.title }}</h1>
-  <address dir="auto">
-    <a rel="author">{{ article.author }}</a><!--
- --><time datetime="">{{ date }}</time>
-  </address>
-</header>
-<article id="_tl_editor" class="tl_article_content">{{ content }}</article>
-{% endblock %}
+{% block content %}<header class="tl_article_header">
+            <h1 dir="auto">{{ article.title }}</h1>
+            <address dir="auto">
+              <a rel="author">{{ article.author }}</a><!--
+           --><time datetime="">{{ date }}</time>
+            </address>
+          </header>
+          <article id="_tl_editor" class="tl_article_content">{{ content }}</article>{% endblock %}
 
-{% block script %}
-<script>var T = { pageId: location.pathname.replace('/', '') };</script>
-{% endblock %}
+{% block script %}<script>var T = { pageId: location.pathname.replace('/', '') };</script>{% endblock %}

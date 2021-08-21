@@ -1,20 +1,16 @@
 {% extends "base.html" %}
 
-{% block content %}
-<header class="tl_article_header">
-  <h1 dir="auto"></h1>
-  <address dir="auto">
-    <a rel="author"></a><!--
- --><time datetime=""></time>
-  </address>
-</header>
-<article id="_tl_editor" class="tl_article_content"><!--
---><h1><br></h1><!--
---><address><br></address><!--
---><p><br></p>
-</article>
-{% endblock %}
+{% block content %}<header class="tl_article_header">
+            <h1 dir="auto"></h1>
+            <address dir="auto">
+              <a rel="author"></a><!--
+           --><time datetime=""></time>
+            </address>
+          </header>
+          <article id="_tl_editor" class="tl_article_content"><!--
+         --><h1><br></h1><!--
+         --><address><br></address><!--
+         --><p><br></p>
+          </article>{% endblock %}
 
-{% block script %}
-<script>var T = { pageId:0 };</script>
-{% endblock %}
+{% block script %}<script>var T = { pageId:0 };</script>{% endblock %}
