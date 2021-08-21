@@ -48,11 +48,7 @@ def try_register(request) -> JsonResponse:
 
 @require_http_methods(["POST"])
 def try_save(request):
-    post = request.POST
-    # post = request.POST.copy()
-    # post['text'] = request.FILES.get('Data').read().decode()
-
-    form = ArticleForm(post)
+    form = ArticleForm(request.POST)
 
     if not form.is_valid():
         return JsonResponse(
