@@ -32,7 +32,7 @@ def try_register(request) -> JsonResponse:
     user.email = request.POST.get('email', '')
     user.save()
 
-    if owner_hash := request.session.get('externalid', ):
+    if owner_hash := request.session.get('externalid',):
         ExternalHashId.objects.create(user=user, session=owner_hash)
 
         articles = Article.objects.filter(owner_hash=owner_hash)
@@ -61,7 +61,7 @@ def try_save(request):
     
     slug = request.POST.get('save_hash', )
     if slug != '':
-        owner_hash = request.session.get('externalid', )
+        owner_hash = request.session.get('externalid',)
 
         try:
             article = Article.objects.get(slug=slug)
@@ -133,12 +133,10 @@ def try_upload(request) -> JsonResponse:
     instance = Storage(file=file)
     object = instance.save(type=file.content_type.split('/')[-1], bytes=file.read())
 
-    object = instance if object is None else object
-
     return JsonResponse(
         [
             {
-                'src': f'/media/{object}'
+                'src': f'/media/{instance if object is None else object}'
             }
         ],
         safe=False
