@@ -1,6 +1,6 @@
 from .models import Article
 
-from .exceptions import page_not_found
+from django.shortcuts import get_object_or_404
 
 from django.utils.html import format_html
 from django.views.generic import TemplateView
@@ -14,12 +14,11 @@ class Create(TemplateView):
 class View(TemplateView):
 
     def get(self, request, slug: str, *args, **kwargs):
-        try:
-            article = Article.objects.get(slug=slug)
-        except Exception as e:
-            return page_not_found(request, e)
+        article = get_object_or_404(Article, slug=slug)
 
-        return render(request, 'view.html',
+        return render(
+            request,
+            'view.html',
             {
                 'article': article,
                 'content': format_html(article.text),

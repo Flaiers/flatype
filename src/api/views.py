@@ -32,7 +32,7 @@ def try_register(request) -> JsonResponse:
     user.email = request.POST.get('email', '')
     user.save()
 
-    if owner_hash := request.session.get('externalid'):
+    if owner_hash := request.session.get('externalid',):
         ExternalHashId.objects.create(user=user, session=owner_hash)
 
         articles = Article.objects.filter(owner_hash=owner_hash)
@@ -59,9 +59,9 @@ def try_save(request):
             status=422
         )
     
-    slug = request.POST.get('save_hash')
+    slug = request.POST.get('save_hash', )
     if slug != '':
-        owner_hash = request.session.get('externalid')
+        owner_hash = request.session.get('externalid',)
 
         try:
             article = Article.objects.get(slug=slug)
@@ -75,7 +75,7 @@ def try_save(request):
                     status=403
                 )
 
-        except Exception:
+        except Article.DoesNotExist:
             return JsonResponse(
                 {
                     'error': True,
@@ -84,15 +84,15 @@ def try_save(request):
                 status=404
             )
 
-        article.title = request.POST.get('title')
+        article.title = request.POST.get('title',)
 
-        if request.POST.get('author'):
-            article.author = request.POST.get('author')
+        if author := request.POST.get('author',):
+            article.author = author
 
         if request.user.is_authenticated and owner_hash and article.owner is None:
             article.owner = request.user
 
-        article.text = request.POST.get('text')
+        article.text = request.POST.get('text',)
         article.save()
 
     else:
@@ -104,7 +104,7 @@ def try_save(request):
         if request.user.is_authenticated:
             article.owner = request.user
         else:
-            if owner_hash := request.session.get('externalid'):
+            if owner_hash := request.session.get('externalid',):
                 article.owner_hash = owner_hash
             else:
                 article.owner_hash = GenerateRandomHash(Article)
@@ -129,16 +129,14 @@ def try_upload(request) -> JsonResponse:
             status=422
         )
 
-    file = request.FILES.get('file')
+    file = request.FILES.get('file',)
     instance = Storage(file=file)
     object = instance.save(type=file.content_type.split('/')[-1], bytes=file.read())
-
-    object = instance if object is None else object
 
     return JsonResponse(
         [
             {
-                'src': f'/media/{object}'
+                'src': f'/media/{instance if object is None else object}'
             }
         ],
         safe=False
