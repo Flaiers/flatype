@@ -8,5 +8,5 @@ pytz
 sqlparse
 zope.interface
 requests
-psycopg2
+psycopg2-binary
 django-debug-toolbar

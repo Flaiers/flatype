@@ -1,6 +1,9 @@
 import os
 import environ
 
+from packs.types import bool
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = environ.Path(__file__) - 4
 
@@ -14,7 +17,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = bool(os.environ.get("DEBUG"))
 
 ALLOWED_HOSTS = list(os.environ.get('ALLOWED_HOSTS'))
 
@@ -92,11 +95,11 @@ LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE')
 
 TIME_ZONE = os.environ.get('TIME_ZONE')
 
-USE_I18N = os.environ.get('USE_I18N')
+USE_I18N = bool(os.environ.get('USE_I18N'))
 
-USE_L10N = os.environ.get('USE_L10N')
+USE_L10N = bool(os.environ.get('USE_L10N'))
 
-USE_TZ = os.environ.get('USE_TZ')
+USE_TZ = bool(os.environ.get('USE_TZ'))
 
 
 # Static files (CSS, JavaScript, Images)
