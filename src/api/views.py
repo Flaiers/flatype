@@ -59,7 +59,8 @@ def try_save(request):
             status=422
         )
     
-    if slug := request.POST.get('save_hash') != '':
+    slug = request.POST.get('save_hash')
+    if slug != '':
         owner_hash = request.session.get('externalid')
 
         try:
