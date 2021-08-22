@@ -10,9 +10,9 @@ from django.http import JsonResponse
 
 
 def try_check(request) -> JsonResponse:
-    page_id = request.POST.get('page_id',)
+    slug = request.POST.get('page_id',)
 
-    if page_id == '0':
+    if slug == '0':
         return JsonResponse({
             'short_name': f'👤 {request.user}',
             'author_name': str(request.user),
@@ -22,7 +22,7 @@ def try_check(request) -> JsonResponse:
         })
 
     try:
-        article = Article.objects.get(slug=page_id)
+        article = Article.objects.get(slug=slug)
     except Article.DoesNotExist:
         return JsonResponse(
             {
@@ -38,7 +38,7 @@ def try_check(request) -> JsonResponse:
         'short_name': f'👤 {request.user}',
         'author_name': str(request.user),
         'author_url': '#' if request.user.is_authenticated else '',
-        'save_hash': page_id,
+        'save_hash': slug,
         'can_edit': True if request.user == article.owner or \
                             owner_hash == article.owner_hash else False,
     })

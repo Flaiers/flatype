@@ -49,7 +49,6 @@ def try_register(request) -> JsonResponse:
 @require_http_methods(["POST"])
 def try_save(request):
     form = ArticleForm(request.POST)
-
     if not form.is_valid():
         return JsonResponse(
             {
@@ -58,23 +57,13 @@ def try_save(request):
             },
             status=422
         )
-    
-    slug = request.POST.get('save_hash', )
+
+    slug = request.POST.get('save_hash',)
     if slug != '':
         owner_hash = request.session.get('externalid',)
 
         try:
             article = Article.objects.get(slug=slug)
-
-            if not (request.user == article.owner or owner_hash == article.owner_hash):
-                return JsonResponse(
-                    {
-                        'error': True,
-                        'data': 'Forbidden'
-                    },
-                    status=403
-                )
-
         except Article.DoesNotExist:
             return JsonResponse(
                 {
@@ -84,22 +73,26 @@ def try_save(request):
                 status=404
             )
 
-        article.title = request.POST.get('title',)
+        if not (request.user == article.owner or owner_hash == article.owner_hash):
+            return JsonResponse(
+                {
+                    'error': True,
+                    'data': 'Forbidden'
+                },
+                status=403
+            )
 
-        if author := request.POST.get('author',):
-            article.author = author
+        article.title = request.POST.get('title',)
+        article.author = request.POST.get('author',)
+        article.text = request.POST.get('text',)
 
         if request.user.is_authenticated and owner_hash and article.owner is None:
             article.owner = request.user
 
-        article.text = request.POST.get('text',)
         article.save()
 
     else:
         article = form.save(commit=False)
-
-        if article.author is None:
-            article.author = request.user
 
         if request.user.is_authenticated:
             article.owner = request.user
