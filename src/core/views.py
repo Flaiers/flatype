@@ -1,13 +1,10 @@
-from api.views import try_edit
-
 from .models import Article
-from .forms import ArticleForm
 
 from .exceptions import page_not_found
 
 from django.utils.html import format_html
 from django.views.generic import TemplateView
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 
 class Create(TemplateView):

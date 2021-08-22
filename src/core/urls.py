@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import exceptions, views
+from . import views
 
 
 urlpatterns = [
@@ -9,7 +9,7 @@ urlpatterns = [
 ]
 
 
-handler400 = exceptions.bad_request
-handler403 = exceptions.permission_denied
-handler404 = exceptions.page_not_found
-handler500 = exceptions.server_error
+handler400 = "core.exceptions.bad_request"
+handler403 = "core.exceptions.permission_denied"
+handler404 = "core.exceptions.page_not_found"
+handler500 = "core.exceptions.server_error"
