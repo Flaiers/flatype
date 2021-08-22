@@ -1,19 +1,17 @@
-{% extends "base.html" %}
+{% extends "exception.html" %}
 
 {% block title %}Forbidden – {% endblock %}
 
-{% block content %}
-<div class="tl_page_wrap">
-  <div class="tl_page">
-    <main class="tl_message">
-      <section>
-        <h1>403</h1>
-        Forbidden
-      </section>
-      <aside class="tl_message_buttons">
-        <a class="button create_button" href="{% url 'create' %}">Create new</a>
-      </aside>
-    </main>
-  </div>
-</div>
-{% endblock %}
+{% block content %}<div class="tl_page_wrap">
+      <div class="tl_page">
+        <main class="tl_message">
+          <section>
+            <h1>403</h1>
+            Forbidden
+          </section>
+          <aside class="tl_message_buttons">
+            <a class="button create_button" href="/">Create new</a>
+          </aside>
+        </main>
+      </div>
+    </div>{% endblock %}

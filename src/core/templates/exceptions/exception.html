@@ -1,0 +1,13 @@
+{% load i18n static %}<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}Flatype</title>
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="shortcut icon" href="{% static '/img/logo.png' %}" type="image/png" />
+    <link rel="stylesheet" href="{% static 'css/core.min.css' %}" />
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>
