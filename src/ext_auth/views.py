@@ -21,7 +21,17 @@ def try_check(request) -> JsonResponse:
             'can_edit': False,
         })
 
-    article = Article.objects.get(slug=page_id)
+    try:
+        article = Article.objects.get(slug=page_id)
+    except Article.DoesNotExist:
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'Article not found'
+            },
+            status=404
+        )
+
     owner_hash = request.session.get('externalid')
 
     return JsonResponse({

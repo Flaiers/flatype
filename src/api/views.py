@@ -75,7 +75,7 @@ def try_save(request):
                     status=403
                 )
 
-        except Exception:
+        except Article.DoesNotExist:
             return JsonResponse(
                 {
                     'error': True,
