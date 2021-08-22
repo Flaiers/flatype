@@ -16,7 +16,9 @@ class View(TemplateView):
     def get(self, request, slug: str, *args, **kwargs):
         article = get_object_or_404(Article, slug=slug)
 
-        return render(request, 'view.html',
+        return render(
+            request,
+            'view.html',
             {
                 'article': article,
                 'content': format_html(article.text),

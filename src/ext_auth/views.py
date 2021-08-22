@@ -10,7 +10,7 @@ from django.http import JsonResponse
 
 
 def try_check(request) -> JsonResponse:
-    page_id = request.POST.get('page_id')
+    page_id = request.POST.get('page_id',)
 
     if page_id == '0':
         return JsonResponse({
@@ -32,15 +32,15 @@ def try_check(request) -> JsonResponse:
             status=404
         )
 
-    owner_hash = request.session.get('externalid')
+    owner_hash = request.session.get('externalid',)
 
     return JsonResponse({
         'short_name': f'👤 {request.user}',
         'author_name': str(request.user),
         'author_url': '#' if request.user.is_authenticated else '',
         'save_hash': page_id,
-        'can_edit': True if request.user == article.owner \
-                    or owner_hash == article.owner_hash else False,
+        'can_edit': True if request.user == article.owner or \
+                            owner_hash == article.owner_hash else False,
     })
 
 
@@ -66,8 +66,8 @@ def try_login(request) -> JsonResponse:
             status=409
         )
 
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    username = request.POST.get('username',)
+    password = request.POST.get('password',)
 
     user = authenticate(request, username=username, password=password)
     if user is None:

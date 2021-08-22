@@ -22,11 +22,12 @@ class Article(models.Model):
     text = models.TextField()
     date = models.DateField(default=date.today)
 
-    def __str__(self) -> str: return self.slug
+    def __str__(self) -> str:
+        return self.slug
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w)for w in self.title.lower())) + \
+            self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w) for w in self.title.lower())) + \
                         self.date.strftime('-%m-%d')
         try:
             super(type(self), self).save(*args, **kwargs)
@@ -57,7 +58,6 @@ class Storage(models.Model):
 
         self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
         super(type(self), self).save()
-
 
     class Meta:
         verbose_name = "Storage object"
