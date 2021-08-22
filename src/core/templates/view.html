@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}{{ article.title }} – {% endblock %}
+{% block title %}{{ title }} – {% endblock %}
 
 {% block content %}<header class="tl_article_header">
-            <h1 dir="auto">{{ article.title }}</h1>
+            <h1 dir="auto">{{ title }}</h1>
             <address dir="auto">
-              <a rel="author">{{ article.author }}</a><!--
+              <a rel="author">{{ author }}</a><!--
            --><time datetime="">{{ date }}</time>
             </address>
           </header>

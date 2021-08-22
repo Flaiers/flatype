@@ -20,8 +20,9 @@ class View(TemplateView):
             request,
             'view.html',
             {
-                'article': article,
-                'content': format_html(article.text),
+                'title': article.title,
+                'author': article.author if article.author is not None else '',
                 'date': article.date.strftime('%B %d, %Y'),
+                'content': format_html(article.text),
             }
         )
