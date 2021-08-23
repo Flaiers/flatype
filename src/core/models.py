@@ -45,18 +45,20 @@ class Article(models.Model):
 
 
 class Storage(models.Model):
-    hash = models.CharField(max_length=255, unique=True, db_index=True, blank=True)
+    hash = models.CharField(max_length=255, unique=True, db_index=True, null=True, blank=True)
+    use_hash = models.BooleanField(default=True)
     file = models.FileField(unique=True, db_index=True)
     date = models.DateField(default=date.today)
 
     def __str__(self) -> str: return str(self.file)
 
     def save(self, *args, **kwargs):
-        self.hash = GenerateDataHash(kwargs.get('bytes'), type(self))
-        if type(self.hash) is bytes:
-            return self.hash.decode()
+        if self.use_hash:
+            self.hash = GenerateDataHash(kwargs.get('bytes'), type(self))
+            if type(self.hash) is bytes:
+                return self.hash.decode()
 
-        self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
+            self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
         super(type(self), self).save()
 
     class Meta:

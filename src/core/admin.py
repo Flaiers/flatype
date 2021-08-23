@@ -18,12 +18,13 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Storage)
 class StorageAdmin(admin.ModelAdmin):
-    fields = ('hash', 'file', 'date',)
+    fields = ('hash', 'file', 'date', 'use_hash',)
     list_display = ('file', 'hash', 'date',)
+    list_display_links = ('date',)
     search_fields = ('file', 'hash', 'date',)
     date_hierarchy = 'date'
 
     def get_readonly_fields(self, request, obj=None) -> tuple:
         if obj:
-            return self.readonly_fields + ('hash', 'file', 'date',)
+            return self.readonly_fields + ('hash', 'file', 'date', 'use_hash',)
         return self.readonly_fields
