@@ -23,7 +23,6 @@ def try_register(request) -> JsonResponse:
                 'error': True,
                 'data': 'Form data is not valid'
             },
-            status=422
         )
 
     user = form.save(commit=False)
@@ -55,7 +54,6 @@ def try_save(request):
                 'error': True,
                 'data': 'Form data is not valid'
             },
-            status=422
         )
 
     slug = form.data.get('save_hash',)
@@ -70,7 +68,6 @@ def try_save(request):
                     'error': True,
                     'data': 'Article not found'
                 },
-                status=404
             )
 
         if not (request.user == article.owner or owner_hash == article.owner_hash):
@@ -79,7 +76,6 @@ def try_save(request):
                     'error': True,
                     'data': 'Forbidden'
                 },
-                status=403
             )
 
         article.title = form.cleaned_data.get('title',)
@@ -119,7 +115,6 @@ def try_upload(request) -> JsonResponse:
                 'error': True,
                 'data': 'Form data is not valid'
             },
-            status=422
         )
 
     file = request.FILES.get('file',)

@@ -29,7 +29,6 @@ def try_check(request) -> JsonResponse:
                 'error': True,
                 'data': 'Article not found'
             },
-            status=404
         )
 
     owner_hash = request.session.get('externalid',)
@@ -54,7 +53,6 @@ def try_login(request) -> JsonResponse:
                 'error': True,
                 'data': 'Form data is not valid'
             },
-            status=422
         )
 
     if request.user.is_authenticated:
@@ -63,7 +61,6 @@ def try_login(request) -> JsonResponse:
                 'error': True,
                 'data': 'User already authenticated'
             },
-            status=409
         )
 
     username = form.cleaned_data.get('username',)
@@ -76,7 +73,6 @@ def try_login(request) -> JsonResponse:
                 'error': True,
                 'data': 'User not found'
             },
-            status=404
         )
 
     if not user.is_active:
@@ -85,7 +81,6 @@ def try_login(request) -> JsonResponse:
                 'error': True,
                 'data': 'User is locked'
             },
-            status=423
         )
 
     login(request, user)
@@ -101,7 +96,6 @@ def try_logout(request) -> JsonResponse:
                 'error': True,
                 'data': 'User is not authenticated'
             },
-            status=401
         )
 
     logout(request)
