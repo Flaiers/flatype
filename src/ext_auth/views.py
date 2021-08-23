@@ -66,8 +66,8 @@ def try_login(request) -> JsonResponse:
             status=409
         )
 
-    username = request.POST.get('username',)
-    password = request.POST.get('password',)
+    username = form.cleaned_data.get('username',)
+    password = form.cleaned_data.get('password',)
 
     user = authenticate(request, username=username, password=password)
     if user is None:
