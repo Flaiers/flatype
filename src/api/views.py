@@ -21,7 +21,7 @@ def try_register(request) -> JsonResponse:
         return JsonResponse(
             {
                 'error': True,
-                'data': 'Form data is not valid'
+                'data': 'Data is not valid'
             },
         )
 
@@ -52,7 +52,7 @@ def try_save(request):
         return JsonResponse(
             {
                 'error': True,
-                'data': 'Form data is not valid'
+                'data': 'Data is not valid'
             },
         )
 
@@ -113,7 +113,7 @@ def try_upload(request) -> JsonResponse:
         return JsonResponse(
             {
                 'error': True,
-                'data': 'Form data is not valid'
+                'data': 'Data is not valid'
             },
         )
 

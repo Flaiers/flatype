@@ -51,7 +51,7 @@ def try_login(request) -> JsonResponse:
         return JsonResponse(
             {
                 'error': True,
-                'data': 'Form data is not valid'
+                'data': 'Data is not valid'
             },
         )
 

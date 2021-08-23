@@ -98,7 +98,7 @@ textarea {
   right: 0;
   margin: 46px 0 0 376px;
 }
-@media (max-width: 960px) {
+@media (max-width: 965px) {
   .tl_article_buttons {
     position: static;
     width: auto;
@@ -409,7 +409,7 @@ body.mobile .button_hover {
   visibility: visible;
   opacity: 1;
 }
-@media (max-width: 960px) {
+@media (max-width: 965px) {
   .tl_blocks {
     text-align: center;
   }
@@ -422,7 +422,7 @@ body.mobile .button_hover {
   margin-right: -6px;
   width: 80px;
 }
-@media (max-width: 960px) {
+@media (max-width: 965px) {
   .tl_blocks .buttons {
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 14px;
@@ -443,7 +443,7 @@ body.mobile .button_hover {
   cursor: pointer;
   float: right;
 }
-@media (max-width: 960px) {
+@media (max-width: 965px) {
   .tl_blocks button {
     float: none;
   }
@@ -514,7 +514,7 @@ body.mobile .button_hover {
   visibility: hidden;
   transition: opacity 0.15s ease;
 }
-@media (max-width: 960px) {
+@media (max-width: 965px) {
   .tl_article.tl_article_edit [data-label]:after {
     display: none;
   }
@@ -835,12 +835,12 @@ body.mobile .button_hover {
 .account_bottom {
   display: none;
 }
-@media (max-width: 960px) {
+@media (max-width: 965px) {
   .account_top {
     display: none;
   }
 }
-@media (max-width: 960px) {
+@media (max-width: 965px) {
   .account_bottom {
     display: block;
   }
