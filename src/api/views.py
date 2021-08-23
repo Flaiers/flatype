@@ -27,9 +27,9 @@ def try_register(request) -> JsonResponse:
         )
 
     user = form.save(commit=False)
-    user.first_name = request.POST.get('first_name', '')
-    user.last_name = request.POST.get('last_name', '')
-    user.email = request.POST.get('email', '')
+    user.first_name = form.data.get('first_name', '')
+    user.last_name = form.data.get('last_name', '')
+    user.email = form.data.get('email', '')
     user.save()
 
     if owner_hash := request.session.get('externalid',):
@@ -58,7 +58,7 @@ def try_save(request):
             status=422
         )
 
-    slug = request.POST.get('save_hash',)
+    slug = form.data.get('save_hash',)
     if slug != '':
         owner_hash = request.session.get('externalid',)
 
@@ -82,9 +82,9 @@ def try_save(request):
                 status=403
             )
 
-        article.title = request.POST.get('title',)
-        article.author = request.POST.get('author',)
-        article.text = request.POST.get('text',)
+        article.title = form.cleaned_data.get('title',)
+        article.author = form.cleaned_data.get('author',)
+        article.text = form.cleaned_data.get('text',)
 
         if request.user.is_authenticated and owner_hash and article.owner is None:
             article.owner = request.user

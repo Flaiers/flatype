@@ -13,8 +13,8 @@ class Create(TemplateView):
 
 class View(TemplateView):
 
-    def get(self, request, slug: str, *args, **kwargs):
-        article = get_object_or_404(Article, slug=slug)
+    def get(self, request, *args, **kwargs):
+        article = get_object_or_404(Article, **kwargs)
 
         return render(
             request,
