@@ -2,7 +2,7 @@ asgiref
 DateTime
 Django
 gunicorn
-django-environ
+python-dotenv
 django-jazzmin
 pytz
 sqlparse
