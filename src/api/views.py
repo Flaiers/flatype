@@ -70,7 +70,9 @@ def try_save(request):
                 },
             )
 
-        if not (request.user == article.owner or owner_hash == article.owner_hash):
+        if not (request.user == article.owner or \
+               (owner_hash == article.owner_hash and \
+               (owner_hash and article.owner_hash) != None)):
             return JsonResponse(
                 {
                     'error': True,

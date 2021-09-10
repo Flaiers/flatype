@@ -39,7 +39,9 @@ def try_check(request) -> JsonResponse:
         'author_url': '#' if request.user.is_authenticated else '',
         'save_hash': slug,
         'can_edit': True if request.user == article.owner or \
-                            owner_hash == article.owner_hash else False,
+                           (owner_hash == article.owner_hash and \
+                           (owner_hash and article.owner_hash) != None) \
+                            else False,
     })
 
 
