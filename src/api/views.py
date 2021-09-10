@@ -58,7 +58,7 @@ def try_save(request):
 
     slug = form.data.get('save_hash',)
     if slug != '':
-        owner_hash = request.session.get('externalid',)
+        owner_hash = request.session.get('externalid', '')
 
         try:
             article = Article.objects.get(slug=slug)
