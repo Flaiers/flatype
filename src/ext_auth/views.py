@@ -31,7 +31,7 @@ def try_check(request) -> JsonResponse:
             },
         )
 
-    owner_hash = request.session.get('externalid', '')
+    owner_hash = request.session.get('externalid',)
 
     return JsonResponse({
         'short_name': f'👤 {request.user}',
