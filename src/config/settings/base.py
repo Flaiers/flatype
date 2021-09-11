@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CONN_MAX_AGE = None
 ROOT_URLCONF = 'config.urls'
 PREPEND_WWW = bool(os.getenv('PREPEND_WWW'))
 
