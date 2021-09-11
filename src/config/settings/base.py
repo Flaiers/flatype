@@ -48,8 +48,8 @@ MIDDLEWARE = [
 ]
 
 CONN_MAX_AGE = None
+APPEND_SLASH = bool(os.getenv('APPEND_SLASH'))
 ROOT_URLCONF = 'config.urls'
-PREPEND_WWW = bool(os.getenv('PREPEND_WWW'))
 
 TEMPLATES = [
     {
