@@ -1,5 +1,3 @@
-from .models import ExternalSession
-
 from django.contrib import admin
 from django.contrib.sessions.models import Session
 
@@ -15,18 +13,7 @@ class SessionAdmin(admin.ModelAdmin):
     list_display = ('session_key', 'get_decoded', 'expire_date',)
 
 
-class ExternalSessionInline(admin.TabularInline):
-    model = ExternalSession
-    extra = 0
-
-
 @admin.register(UserModel)
 class UserAdmin(BaseUserAdmin):
     BaseUserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
 
-    inlines = [
-        ExternalSessionInline,
-    ]
-
-
-admin.register(ExternalSession)
