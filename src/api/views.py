@@ -18,8 +18,8 @@ def try_save(request):
             },
         )
 
-    slug = form.data.get('save_hash',)
-    if slug != '':
+    slug = form.data.get('page_id',)
+    if slug != '0':
         owner_hash = request.session.get('_ext_auth_hash',)
 
         try:

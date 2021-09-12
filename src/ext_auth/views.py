@@ -18,7 +18,6 @@ def try_check(request) -> JsonResponse:
             'short_name': f'👤 {request.user}',
             'author_name': str(request.user),
             'author_url': request.user.link if request.user.is_authenticated else '',
-            'save_hash': '',
             'can_edit': False,
         })
 
@@ -38,7 +37,6 @@ def try_check(request) -> JsonResponse:
         'short_name': f'👤 {request.user}',
         'author_name': str(request.user),
         'author_url': request.user.link if request.user.is_authenticated else '',
-        'save_hash': slug,
         'can_edit': True if request.user == article.owner or \
                            (owner_hash == article.owner_hash and \
                            (owner_hash and article.owner_hash) != None) \
