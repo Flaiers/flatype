@@ -16,7 +16,7 @@ def try_check(request) -> JsonResponse:
         return JsonResponse({
             'short_name': f'👤 {request.user}',
             'author_name': str(request.user),
-            'author_url': '#' if request.user.is_authenticated else '',
+            'author_url': request.user.link if request.user.is_authenticated else '',
             'save_hash': '',
             'can_edit': False,
         })
