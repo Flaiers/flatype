@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser, Group as BaseGroup
 
 
 class User(AbstractUser):
@@ -9,7 +9,7 @@ class User(AbstractUser):
     )
 
 
-class Group(Group):
+class Group(BaseGroup):
     pass
 
 

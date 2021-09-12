@@ -2,7 +2,12 @@ from .models import ExternalHashId, Group
 
 from django.contrib import admin
 from django.contrib.sessions.models import Session
-from django.contrib.auth import get_user_model, admin as auth_admin
+
+from django.contrib.auth.admin import (
+    UserAdmin as BaseUserAdmin,
+    GroupAdmin as BaseGroupAdmin
+)
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group as BaseGroup
 
 
@@ -23,8 +28,8 @@ class ExternalHashIdInline(admin.TabularInline):
 
 
 @admin.register(UserModel)
-class UserAdmin(auth_admin.UserAdmin):
-    auth_admin.UserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
+class UserAdmin(BaseUserAdmin):
+    BaseUserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
 
     inlines = [
         ExternalHashIdInline,
@@ -32,7 +37,7 @@ class UserAdmin(auth_admin.UserAdmin):
 
 
 @admin.register(Group)
-class GroupAdmin(auth_admin.GroupAdmin):
+class GroupAdmin(BaseGroupAdmin):
     pass
 
 
