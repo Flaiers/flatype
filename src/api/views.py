@@ -31,7 +31,7 @@ def try_register(request) -> JsonResponse:
     user.email = form.data.get('email', '')
     user.save()
 
-    if owner_hash := request.session.get('externalid',):
+    if owner_hash := request.session.get('_ext_auth_hash',):
         ExternalHashId.objects.create(user=user, session=owner_hash)
 
         articles = Article.objects.filter(owner_hash=owner_hash)
@@ -58,7 +58,7 @@ def try_save(request):
 
     slug = form.data.get('save_hash',)
     if slug != '':
-        owner_hash = request.session.get('externalid',)
+        owner_hash = request.session.get('_ext_auth_hash',)
 
         try:
             article = Article.objects.get(slug=slug)
@@ -95,15 +95,16 @@ def try_save(request):
         if request.user.is_authenticated:
             article.owner = request.user
         else:
-            if owner_hash := request.session.get('externalid',):
+            if owner_hash := request.session.get('_ext_auth_hash',):
                 article.owner_hash = owner_hash
             else:
                 article.owner_hash = GenerateRandomHash(Article)
-                request.session['externalid'] = article.owner_hash
+                request.session['_ext_auth_hash'] = article.owner_hash
 
         article.save()
 
     return JsonResponse({
+        'page_id': article.slug,
         'path': article.slug
     })
 

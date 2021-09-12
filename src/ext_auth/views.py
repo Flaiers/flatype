@@ -31,12 +31,12 @@ def try_check(request) -> JsonResponse:
             },
         )
 
-    owner_hash = request.session.get('externalid',)
+    owner_hash = request.session.get('_ext_auth_hash',)
 
     return JsonResponse({
         'short_name': f'👤 {request.user}',
         'author_name': str(request.user),
-        'author_url': '#' if request.user.is_authenticated else '',
+        'author_url': request.user.link if request.user.is_authenticated else '',
         'save_hash': slug,
         'can_edit': True if request.user == article.owner or \
                            (owner_hash == article.owner_hash and \
