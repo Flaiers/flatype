@@ -9,17 +9,17 @@ class User(AbstractUser):
     )
 
     class Meta(AbstractUser.Meta):
-        db_table = 'auth_user'
+        db_table = 'users'
 
 
 UserModel = get_user_model()
 
 
-class ExternalHashId(models.Model):
+class ExternalSession(models.Model):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     session = models.CharField(max_length=32, unique=True, blank=True, null=True, db_index=True)
 
     class Meta:
-        db_table = 'auth_hash'
-        verbose_name = "External hash id"
-        verbose_name_plural = "External hash id's"
+        db_table = 'external_sessions'
+        verbose_name = "External session"
+        verbose_name_plural = "External sessions"

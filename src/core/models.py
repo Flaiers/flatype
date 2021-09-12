@@ -43,6 +43,9 @@ class Article(models.Model):
 
             super(type(self), self).save(*args, **kwargs)
 
+    class Meta:
+        db_table = 'articles'
+
 
 class Storage(models.Model):
     hash = models.CharField(max_length=255, unique=True, db_index=True, null=True, blank=True)
@@ -62,5 +65,6 @@ class Storage(models.Model):
         super(type(self), self).save()
 
     class Meta:
+        db_table = 'storage'
         verbose_name = "Storage object"
         verbose_name_plural = "Storage"

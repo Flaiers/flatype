@@ -1,5 +1,5 @@
 from core.models import Article
-from ext_auth.models import ExternalHashId
+from ext_auth.models import ExternalSession
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
@@ -63,7 +63,7 @@ def try_register(request) -> JsonResponse:
     user.save()
 
     if owner_hash := request.session.get('_ext_auth_hash',):
-        ExternalHashId.objects.create(user=user, session=owner_hash)
+        ExternalSession.objects.create(user=user, session=owner_hash)
 
         articles = Article.objects.filter(owner_hash=owner_hash)
         for article in articles:
