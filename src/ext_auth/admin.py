@@ -22,12 +22,12 @@ class ExternalHashIdInline(admin.TabularInline):
 
 
 class UserAdmin(auth_admin.UserAdmin):
+    auth_admin.UserAdmin.fieldsets[0][1]['fields'] = ('username', 'user_link', 'password')
 
     inlines = [
         ExternalHashIdInline,
     ]
 
 
-admin.site.unregister(UserModel)
 admin.site.register(UserModel, UserAdmin)
 admin.register(ExternalHashId)
