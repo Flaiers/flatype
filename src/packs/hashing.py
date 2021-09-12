@@ -3,13 +3,13 @@ import hashlib
 
 
 def GenerateRandomHash(model=None) -> str:
-    hash = hashlib.md5(os.urandom(64)).hexdigest()
+    hash = hashlib.sha256(os.urandom(64)).hexdigest()
 
     if model is not None:
         hash_exist = model.objects.filter(owner_hash=hash)
 
         while hash_exist:
-            hash = hashlib.md5(os.urandom(64)).hexdigest()
+            hash = hashlib.sha256(os.urandom(64)).hexdigest()
             hash_exist = model.objects.filter(owner_hash=hash)
             continue
 
