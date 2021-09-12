@@ -1,8 +1,9 @@
-from .models import ExternalHashId
+from .models import ExternalHashId, Group
 
 from django.contrib import admin
 from django.contrib.sessions.models import Session
 from django.contrib.auth import get_user_model, admin as auth_admin
+from django.contrib.auth.models import Group as BaseGroup
 
 
 UserModel = get_user_model()
@@ -21,13 +22,19 @@ class ExternalHashIdInline(admin.TabularInline):
     extra = 0
 
 
+@admin.register(UserModel)
 class UserAdmin(auth_admin.UserAdmin):
-    auth_admin.UserAdmin.fieldsets[0][1]['fields'] = ('username', 'user_link', 'password')
+    auth_admin.UserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
 
     inlines = [
         ExternalHashIdInline,
     ]
 
 
-admin.site.register(UserModel, UserAdmin)
+@admin.register(Group)
+class GroupAdmin(auth_admin.GroupAdmin):
+    pass
+
+
+admin.site.unregister(BaseGroup)
 admin.register(ExternalHashId)
