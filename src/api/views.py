@@ -3,7 +3,7 @@ from core.forms import ArticleForm, StorageForm
 
 from django.contrib.sessions.models import Session
 
-from packs.hashing import GenerateRandomHash
+from django.middleware.csrf import get_token
 
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
@@ -59,13 +59,11 @@ def try_save(request):
         if request.user.is_authenticated:
             article.owner = request.user
         else:
-            if session_key := request.session.session_key:
-                session = Session.objects.get(pk=session_key)
-                article.owner_session = session
-            else:
-                # TODO: work with create session
-                article.owner_session = GenerateRandomHash(Article)
-                request.session['_ext_auth_hash'] = article.owner_session
+            if request.session.session_key is None:
+                request.session['_csrftoken'] = get_token(request)
+
+            session = Session.objects.get(pk=request.session.session_key)
+            article.owner_session = session
 
         article.save()
 
