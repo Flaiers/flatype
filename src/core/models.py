@@ -8,6 +8,7 @@ from django.db.utils import IntegrityError
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.sessions.models import Session
 
 
 UserModel = get_user_model()
@@ -18,7 +19,7 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, db_index=True, blank=True)
     author = models.CharField(max_length=64, null=True, blank=True)
     owner = models.ForeignKey(UserModel, null=True, blank=True, on_delete=models.CASCADE)
-    owner_hash = models.CharField(max_length=32, null=True, blank=True)
+    owner_session = models.ForeignKey(Session, null=True, blank=True, on_delete=models.CASCADE)
     text = models.TextField()
     date = models.DateField(default=date.today)
 
