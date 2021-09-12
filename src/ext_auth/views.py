@@ -1,6 +1,7 @@
 from core.models import Article
+from ext_auth.models import ExternalHashId
 
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
@@ -42,6 +43,38 @@ def try_check(request) -> JsonResponse:
                            (owner_hash == article.owner_hash and \
                            (owner_hash and article.owner_hash) != None) \
                             else False,
+    })
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def try_register(request) -> JsonResponse:
+    form = UserCreationForm(request.POST)
+    if not form.is_valid():
+        return JsonResponse(
+            {
+                'error': True,
+                'data': 'Data is not valid'
+            },
+        )
+
+    user = form.save(commit=False)
+    user.first_name = form.data.get('first_name', '')
+    user.last_name = form.data.get('last_name', '')
+    user.email = form.data.get('email', '')
+    user.save()
+
+    if owner_hash := request.session.get('_ext_auth_hash',):
+        ExternalHashId.objects.create(user=user, session=owner_hash)
+
+        articles = Article.objects.filter(owner_hash=owner_hash)
+        for article in articles:
+            article.owner = user
+            article.save()
+
+    login(request, user)
+    return JsonResponse({
+        'data': 'ok'
     })
 
 
