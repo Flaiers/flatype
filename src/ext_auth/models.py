@@ -1,6 +1,5 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser, Group as BaseGroup
+from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
@@ -8,18 +7,6 @@ class User(AbstractUser):
         help_text='150 characters or fewer. Link to account on the site.'
     )
 
+    class Meta(AbstractUser.Meta):
+        db_table = 'users'
 
-class Group(BaseGroup):
-    pass
-
-
-UserModel = get_user_model()
-
-
-class ExternalHashId(models.Model):
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
-    session = models.CharField(max_length=32, unique=True, blank=True, null=True, db_index=True)
-
-    class Meta:
-        verbose_name = "External hash id"
-        verbose_name_plural = "External hash id's"

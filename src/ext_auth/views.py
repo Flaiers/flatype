@@ -1,5 +1,4 @@
 from core.models import Article
-from ext_auth.models import ExternalHashId
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
@@ -31,15 +30,13 @@ def try_check(request) -> JsonResponse:
             },
         )
 
-    owner_hash = request.session.get('_ext_auth_hash',)
-
     return JsonResponse({
         'short_name': f'👤 {request.user}',
         'author_name': str(request.user),
         'author_url': request.user.link if request.user.is_authenticated else '',
         'can_edit': True if request.user == article.owner or \
-                           (owner_hash == article.owner_hash and \
-                           (owner_hash and article.owner_hash) != None) \
+                           (request.session == article.owner_session and \
+                           (request.session and article.owner_session) != None) \
                             else False,
     })
 
@@ -62,10 +59,8 @@ def try_register(request) -> JsonResponse:
     user.email = form.data.get('email', '')
     user.save()
 
-    if owner_hash := request.session.get('_ext_auth_hash',):
-        ExternalHashId.objects.create(user=user, session=owner_hash)
-
-        articles = Article.objects.filter(owner_hash=owner_hash)
+    if request.session:
+        articles = Article.objects.filter(owner_session=request.session)
         for article in articles:
             article.owner = user
             article.save()

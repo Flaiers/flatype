@@ -20,8 +20,6 @@ def try_save(request):
 
     slug = form.data.get('page_id',)
     if slug != '0':
-        owner_hash = request.session.get('_ext_auth_hash',)
-
         try:
             article = Article.objects.get(slug=slug)
         except Article.DoesNotExist:
@@ -33,8 +31,8 @@ def try_save(request):
             )
 
         if not (request.user == article.owner or \
-               (owner_hash == article.owner_hash and \
-               (owner_hash and article.owner_hash) != None)):
+               (request.session == article.owner_session and \
+               (request.session and article.owner_session) != None)):
             return JsonResponse(
                 {
                     'error': True,
@@ -46,7 +44,7 @@ def try_save(request):
         article.author = form.cleaned_data.get('author',)
         article.text = form.cleaned_data.get('text',)
 
-        if request.user.is_authenticated and owner_hash and article.owner is None:
+        if request.user.is_authenticated and request.session and article.owner is None:
             article.owner = request.user
 
         article.save()
@@ -57,11 +55,12 @@ def try_save(request):
         if request.user.is_authenticated:
             article.owner = request.user
         else:
-            if owner_hash := request.session.get('_ext_auth_hash',):
-                article.owner_hash = owner_hash
+            if request.session:
+                article.owner_session = request.session
             else:
-                article.owner_hash = GenerateRandomHash(Article)
-                request.session['_ext_auth_hash'] = article.owner_hash
+                # TODO: work with create session
+                article.owner_session = GenerateRandomHash(Article)
+                request.session['_ext_auth_hash'] = article.owner_session
 
         article.save()
 

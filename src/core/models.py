@@ -8,6 +8,7 @@ from django.db.utils import IntegrityError
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.sessions.models import Session
 
 
 UserModel = get_user_model()
@@ -18,7 +19,7 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, db_index=True, blank=True)
     author = models.CharField(max_length=64, null=True, blank=True)
     owner = models.ForeignKey(UserModel, null=True, blank=True, on_delete=models.CASCADE)
-    owner_hash = models.CharField(max_length=32, null=True, blank=True)
+    owner_session = models.ForeignKey(Session, null=True, blank=True, on_delete=models.CASCADE)
     text = models.TextField()
     date = models.DateField(default=date.today)
 
@@ -43,6 +44,9 @@ class Article(models.Model):
 
             super(type(self), self).save(*args, **kwargs)
 
+    class Meta:
+        db_table = 'articles'
+
 
 class Storage(models.Model):
     hash = models.CharField(max_length=255, unique=True, db_index=True, null=True, blank=True)
@@ -62,5 +66,6 @@ class Storage(models.Model):
         super(type(self), self).save()
 
     class Meta:
+        db_table = 'storage'
         verbose_name = "Storage object"
         verbose_name_plural = "Storage"
