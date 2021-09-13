@@ -1,7 +1,9 @@
 from core.models import Article, Storage
 from core.forms import ArticleForm, StorageForm
 
-from packs.hashing import GenerateRandomHash
+from django.contrib.sessions.models import Session
+
+from django.middleware.csrf import get_token
 
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
@@ -30,9 +32,11 @@ def try_save(request):
                 },
             )
 
+        session_key = request.session.session_key
+
         if not (request.user == article.owner or \
-               (request.session == article.owner_session and \
-               (request.session and article.owner_session) != None)):
+               (session_key == str(article.owner_session) and \
+               (session_key and article.owner_session) != None)):
             return JsonResponse(
                 {
                     'error': True,
@@ -44,7 +48,7 @@ def try_save(request):
         article.author = form.cleaned_data.get('author',)
         article.text = form.cleaned_data.get('text',)
 
-        if request.user.is_authenticated and request.session and article.owner is None:
+        if request.user.is_authenticated and session_key and article.owner is None:
             article.owner = request.user
 
         article.save()
@@ -55,12 +59,11 @@ def try_save(request):
         if request.user.is_authenticated:
             article.owner = request.user
         else:
-            if request.session:
-                article.owner_session = request.session
-            else:
-                # TODO: work with create session
-                article.owner_session = GenerateRandomHash(Article)
-                request.session['_ext_auth_hash'] = article.owner_session
+            if request.session.session_key is None:
+                request.session['_csrftoken'] = get_token(request)
+
+            session = Session.objects.get(pk=request.session.session_key)
+            article.owner_session = session
 
         article.save()
 

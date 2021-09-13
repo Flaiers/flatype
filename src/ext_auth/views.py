@@ -1,6 +1,7 @@
 from core.models import Article
+from .forms import UserCreationForm
 
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
@@ -30,13 +31,15 @@ def try_check(request) -> JsonResponse:
             },
         )
 
+    session_key = request.session.session_key
+
     return JsonResponse({
         'short_name': f'👤 {request.user}',
         'author_name': str(request.user),
         'author_url': request.user.link if request.user.is_authenticated else '',
         'can_edit': True if request.user == article.owner or \
-                           (request.session == article.owner_session and \
-                           (request.session and article.owner_session) != None) \
+                           (session_key == str(article.owner_session) and \
+                           (session_key and article.owner_session) != None) \
                             else False,
     })
 
@@ -58,12 +61,6 @@ def try_register(request) -> JsonResponse:
     user.last_name = form.data.get('last_name', '')
     user.email = form.data.get('email', '')
     user.save()
-
-    if request.session:
-        articles = Article.objects.filter(owner_session=request.session)
-        for article in articles:
-            article.owner = user
-            article.save()
 
     login(request, user)
     return JsonResponse({
