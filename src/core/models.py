@@ -1,4 +1,4 @@
-from packs.hashing import GenerateDataHash
+from packs.hashing import generate_data_hash
 
 from datetime import date
 from django.conf import settings
@@ -57,8 +57,9 @@ class Storage(models.Model):
     def __str__(self) -> str: return str(self.file)
 
     def save(self, *args, **kwargs):
+        salt = 'django.core.models.Storage'
         if self.use_hash:
-            self.hash = GenerateDataHash(kwargs.get('bytes'), type(self))
+            self.hash = generate_data_hash(salt, kwargs.get('bytes'), type(self))
             if type(self.hash) is bytes:
                 return self.hash.decode()
 
