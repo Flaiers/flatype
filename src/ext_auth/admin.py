@@ -16,4 +16,3 @@ class SessionAdmin(admin.ModelAdmin):
 @admin.register(UserModel)
 class UserAdmin(BaseUserAdmin):
     BaseUserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
-

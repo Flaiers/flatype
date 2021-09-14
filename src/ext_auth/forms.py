@@ -11,3 +11,4 @@ class UserCreationForm(BaseUserCreationForm):
 
     class Meta(BaseUserCreationForm.Meta):
         model = UserModel
+        fields = BaseUserCreationForm.Meta.fields + ('email',)
