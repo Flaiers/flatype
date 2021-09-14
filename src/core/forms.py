@@ -7,7 +7,7 @@ class ArticleForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ('title', 'author', 'text',)
+        fields = ('title', 'author', 'content',)
 
 
 class StorageForm(forms.ModelForm):

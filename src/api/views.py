@@ -46,7 +46,7 @@ def try_save(request):
 
         article.title = form.cleaned_data.get('title',)
         article.author = form.cleaned_data.get('author',)
-        article.text = form.cleaned_data.get('text',)
+        article.content = form.cleaned_data.get('content',)
 
         if request.user.is_authenticated and session_key and article.owner is None:
             article.owner = request.user
