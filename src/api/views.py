@@ -34,9 +34,9 @@ def try_save(request):
 
         session_key = request.session.session_key
 
-        if not (request.user == article.owner or \
-               (session_key == str(article.owner_session) and \
-               (session_key and article.owner_session) != None)):
+        if not (request.user == article.owner or
+                (session_key == str(article.owner_session) and
+                 (session_key and article.owner_session) is not None)):
             return JsonResponse(
                 {
                     'error': True,

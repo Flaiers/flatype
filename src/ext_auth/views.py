@@ -37,10 +37,10 @@ def try_check(request) -> JsonResponse:
         'short_name': f'👤 {request.user}',
         'author_name': str(request.user),
         'author_url': request.user.link if request.user.is_authenticated else '',
-        'can_edit': True if request.user == article.owner or \
-                           (session_key == str(article.owner_session) and \
-                           (session_key and article.owner_session) != None) \
-                            else False,
+        'can_edit': True if (request.user == article.owner or
+                             (session_key == str(article.owner_session) and
+                              (session_key and article.owner_session) is not None))
+        else False,
     })
 
 
