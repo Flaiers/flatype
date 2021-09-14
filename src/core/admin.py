@@ -5,9 +5,9 @@ from .models import Article, Storage
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    fields = ('title', 'slug', 'author', 'owner', 'owner_session', 'text', 'date',)
+    fields = ('title', 'slug', 'author', 'owner', 'owner_session', 'content', 'date',)
     list_display = ('title', 'slug', 'author', 'date',)
-    search_fields = ('title', 'text',)
+    search_fields = ('title', 'content',)
     date_hierarchy = 'date'
 
     def get_readonly_fields(self, request, obj=None) -> tuple:

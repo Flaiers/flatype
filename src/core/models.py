@@ -20,7 +20,7 @@ class Article(models.Model):
     author = models.CharField(max_length=64, null=True, blank=True)
     owner = models.ForeignKey(UserModel, null=True, blank=True, on_delete=models.CASCADE)
     owner_session = models.ForeignKey(Session, null=True, blank=True, on_delete=models.CASCADE)
-    text = models.TextField()
+    content = models.TextField()
     date = models.DateField(default=date.today)
 
     def __str__(self) -> str:
