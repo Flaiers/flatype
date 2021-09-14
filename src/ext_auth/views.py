@@ -52,14 +52,11 @@ def try_register(request) -> JsonResponse:
         return JsonResponse(
             {
                 'error': True,
-                'data': 'Data is not valid'
+                'data': form.errors
             },
         )
 
     user = form.save(commit=False)
-    user.first_name = form.data.get('first_name', '')
-    user.last_name = form.data.get('last_name', '')
-    user.email = form.data.get('email', '')
     user.save()
 
     login(request, user)
@@ -76,7 +73,7 @@ def try_login(request) -> JsonResponse:
         return JsonResponse(
             {
                 'error': True,
-                'data': 'Data is not valid'
+                'data': form.errors
             },
         )
 

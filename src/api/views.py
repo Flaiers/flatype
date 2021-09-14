@@ -16,7 +16,7 @@ def try_save(request):
         return JsonResponse(
             {
                 'error': True,
-                'data': 'Data is not valid'
+                'data': form.errors
             },
         )
 
@@ -80,7 +80,7 @@ def try_upload(request) -> JsonResponse:
         return JsonResponse(
             {
                 'error': True,
-                'data': 'Data is not valid'
+                'data': form.errors
             },
         )
 
