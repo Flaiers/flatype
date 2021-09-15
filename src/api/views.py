@@ -10,27 +10,23 @@ from django.http import JsonResponse
 
 
 @require_http_methods(["POST"])
-def try_save(request):
+def try_save(request) -> JsonResponse:
     form = ArticleForm(request.POST)
     if not form.is_valid():
-        return JsonResponse(
-            {
-                'error': True,
-                'data': form.errors
-            },
-        )
+        return JsonResponse({
+            'error': True,
+            'data': form.errors
+        })
 
     slug = form.data.get('page_id',)
     if slug != '0':
         try:
             article = Article.objects.get(slug=slug)
         except Article.DoesNotExist:
-            return JsonResponse(
-                {
-                    'error': True,
-                    'data': 'Article not found'
-                },
-            )
+            return JsonResponse({
+                'error': True,
+                'data': 'Article not found'
+            })
 
         session_key = request.session.session_key
 
@@ -42,6 +38,7 @@ def try_save(request):
                     'error': True,
                     'data': 'Forbidden'
                 },
+                status=403
             )
 
         article.title = form.cleaned_data.get('title',)
@@ -77,12 +74,10 @@ def try_save(request):
 def try_upload(request) -> JsonResponse:
     form = StorageForm(request.POST, request.FILES)
     if not form.is_valid():
-        return JsonResponse(
-            {
-                'error': True,
-                'data': form.errors
-            },
-        )
+        return JsonResponse({
+            'error': True,
+            'data': form.errors
+        })
 
     file = request.FILES.get('file',)
     instance = Storage(file=file)
