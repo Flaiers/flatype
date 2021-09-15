@@ -20,7 +20,7 @@ class View(DetailView):
         context = {
             'title': article.title,
             'author': article.author if article.author is not None else '',
-            'date': article.date.strftime('%B %d, %Y'),
+            'date': article.date,
             'content': format_html(article.content)
         }
         return context
