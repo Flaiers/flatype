@@ -7,7 +7,7 @@
             <h1 dir="auto">{{ article.title }}</h1>
             <address dir="auto">
               <a rel="author">{% if article.author is not None %}{{ article.author }}{% endif %}</a><!--
-           --><time datetime="">{{ article.date|date:"F d, Y" }}</time>
+           --><time datetime="">{{ article.date|unlocalize }}</time>
             </address>
           </header>
           <article id="_tl_editor" class="tl_article_content">{{ article.content|safe }}</article>{% endblock %}
