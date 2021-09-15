@@ -11,5 +11,4 @@ class Create(TemplateView):
 class View(DetailView):
 
     model = Article
-    queryset = Article.objects.all()
     template_name = 'view.html'
