@@ -100,6 +100,8 @@ USE_I18N = bool(os.getenv('USE_I18N'))
 
 USE_L10N = bool(os.getenv('USE_L10N'))
 
+DATE_FORMAT = os.getenv('DATE_FORMAT')
+
 USE_TZ = bool(os.getenv('USE_TZ'))
 
 

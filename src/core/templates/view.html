@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% load l10n %}
 
-{% block title %}{{ title }} – {% endblock %}
+{% block title %}{{ article.title }} – {% endblock %}
 
 {% block content %}<header class="tl_article_header">
-            <h1 dir="auto">{{ title }}</h1>
+            <h1 dir="auto">{{ article.title }}</h1>
             <address dir="auto">
-              <a rel="author">{{ author }}</a><!--
-           --><time datetime="">{{ date|date:"F d, Y" }}</time>
+              <a rel="author">{% if article.author is not None %}{{ article.author }}{% endif %}</a><!--
+           --><time datetime="">{{ article.date|unlocalize }}</time>
             </address>
           </header>
-          <article id="_tl_editor" class="tl_article_content">{{ content }}</article>{% endblock %}
+          <article id="_tl_editor" class="tl_article_content">{{ article.content|safe }}</article>{% endblock %}
 
 {% block script %}<script>var T = { pageId: location.pathname.replace('/', '') };</script>{% endblock %}
