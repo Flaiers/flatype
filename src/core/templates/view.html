@@ -6,13 +6,8 @@
 {% block content %}<header class="tl_article_header">
             <h1 dir="auto">{{ article.title }}</h1>
             <address dir="auto">
-              {% if article.author is not None %}
-              <a rel="author">{{ article.author }}</a><!--
+              <a rel="author">{% if article.author is not None %}{{ article.author }}{% endif %}</a><!--
            --><time datetime="">{{ article.date|date:"F d, Y" }}</time>
-              {% else %}
-              <a rel="author"></a><!--
-           --><time datetime="">{{ article.date|date:"F d, Y" }}</time>
-              {% endif %}
             </address>
           </header>
           <article id="_tl_editor" class="tl_article_content">{{ article.content|safe }}</article>{% endblock %}
