@@ -1,0 +1,29 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ title }} – Flatype</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta property="og:title" content="Flatype" />
+    <meta property="og:type" content="exception" />
+    <meta property="og:description" content="Flatype is a minimalist publishing tool that allows you to create articles and push them to the Web in just a click." />
+    <meta property="og:image" content="{% static '/img/logo.png' %}" />
+    <meta property="og:site_name" content="Flatype" />
+    <link rel="shortcut icon" href="{% static '/img/logo.png' %}" type="image/png" />
+    <link rel="stylesheet" href="{% static 'css/core.min.css' %}" />
+  </head>
+  <body>
+    <div class="tl_page_wrap">
+      <div class="tl_page">
+        <main class="tl_message">
+          <section>
+            <h1>{{ status }}</h1>
+            {{ title }}
+          </section>
+          <aside class="tl_message_buttons">
+            <a class="button create_button" href="/">Create new</a>
+          </aside>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
