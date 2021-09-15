@@ -1,10 +1,7 @@
 from .models import Article
 
-from django.shortcuts import get_object_or_404
-
 from django.utils.html import format_html
 from django.views.generic import TemplateView, DetailView
-from django.shortcuts import render
 
 
 class Create(TemplateView):
@@ -19,10 +16,11 @@ class View(DetailView):
     template_name = 'view.html'
 
     def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        article = context['article']
-        context['title'] = article.title
-        context['author'] = article.author if article.author is not None else ''
-        context['date'] = article.date.strftime('%B %d, %Y')
-        context['content'] = format_html(article.content)
+        article = super().get_context_data(*args, **kwargs)['article']
+        context = {
+            'title': article.title,
+            'author': article.author if article.author is not None else '',
+            'date': article.date,
+            'content': format_html(article.content)
+        }
         return context

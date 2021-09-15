@@ -4,19 +4,39 @@ from django.shortcuts import render
 
 @requires_csrf_token
 def bad_request(request, exception):
-    return render(request, 'exceptions/400.html', status=400)
+    status = 400
+    context = {
+        'title': 'Bad Request',
+        'status': status
+    }
+    return render(request, 'exception.html', context, status=status)
 
 
 @requires_csrf_token
 def permission_denied(request, exception):
-    return render(request, 'exceptions/403.html', status=403)
+    status = 403
+    context = {
+        'title': 'Forbidden',
+        'status': status
+    }
+    return render(request, 'exception.html', context, status=status)
 
 
 @requires_csrf_token
 def page_not_found(request, exception):
-    return render(request, 'exceptions/404.html', status=404)
+    status = 404
+    context = {
+        'title': 'Page does not exist',
+        'status': status
+    }
+    return render(request, 'exception.html', context, status=status)
 
 
 @requires_csrf_token
 def server_error(request):
-    return render(request, 'exceptions/500.html', status=500)
+    status = 500
+    context = {
+        'title': 'Internal Server Error',
+        'status': status
+    }
+    return render(request, 'exception.html', context, status=status)

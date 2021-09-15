@@ -24,12 +24,10 @@ def try_check(request) -> JsonResponse:
     try:
         article = Article.objects.get(slug=slug)
     except Article.DoesNotExist:
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'Article not found'
-            },
-        )
+        return JsonResponse({
+            'error': True,
+            'data': 'Article not found'
+        })
 
     session_key = request.session.session_key
 
@@ -49,12 +47,10 @@ def try_check(request) -> JsonResponse:
 def try_register(request) -> JsonResponse:
     form = UserCreationForm(request.POST)
     if not form.is_valid():
-        return JsonResponse(
-            {
-                'error': True,
-                'data': form.errors
-            },
-        )
+        return JsonResponse({
+            'error': True,
+            'data': form.errors
+        })
 
     user = form.save(commit=False)
     user.save()
@@ -70,20 +66,16 @@ def try_register(request) -> JsonResponse:
 def try_login(request) -> JsonResponse:
     form = AuthenticationForm(data=request.POST)
     if not form.is_valid():
-        return JsonResponse(
-            {
-                'error': True,
-                'data': form.errors
-            },
-        )
+        return JsonResponse({
+            'error': True,
+            'data': form.errors
+        })
 
     if request.user.is_authenticated:
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'User already authenticated'
-            },
-        )
+        return JsonResponse({
+            'error': True,
+            'data': 'User already authenticated'
+        })
 
     username = form.cleaned_data.get('username',)
     password = form.cleaned_data.get('password',)
@@ -95,6 +87,7 @@ def try_login(request) -> JsonResponse:
                 'error': True,
                 'data': 'User not found'
             },
+            status=401
         )
 
     if not user.is_active:
@@ -103,6 +96,7 @@ def try_login(request) -> JsonResponse:
                 'error': True,
                 'data': 'User is locked'
             },
+            status=401
         )
 
     login(request, user)
@@ -118,6 +112,7 @@ def try_logout(request) -> JsonResponse:
                 'error': True,
                 'data': 'User is not authenticated'
             },
+            status=401
         )
 
     logout(request)

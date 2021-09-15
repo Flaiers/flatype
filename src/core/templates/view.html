@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load l10n %}
 
 {% block title %}{{ title }} – {% endblock %}
 
@@ -6,7 +7,7 @@
             <h1 dir="auto">{{ title }}</h1>
             <address dir="auto">
               <a rel="author">{{ author }}</a><!--
-           --><time datetime="">{{ date }}</time>
+           --><time datetime="">{{ date|date:"F d, Y" }}</time>
             </address>
           </header>
           <article id="_tl_editor" class="tl_article_content">{{ content }}</article>{% endblock %}
