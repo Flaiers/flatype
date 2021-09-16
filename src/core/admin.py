@@ -5,7 +5,7 @@ from .models import Article, Storage
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    fields = ('title', 'slug', 'author', 'owner', 'owner_session', 'content', 'date',)
+    fields = ('title', 'slug', 'author', 'owner', 'owner_sessions', 'content', 'date',)
     list_display = ('title', 'slug', 'author', 'date',)
     search_fields = ('title', 'content',)
     date_hierarchy = 'date'

@@ -30,14 +30,14 @@ def try_check(request) -> JsonResponse:
         })
 
     session_key = request.session.session_key
-    owner_session = [str(session) for session in article.owner_session.all()] 
+    owner_sessions = [str(session) for session in article.owner_sessions.all()] 
 
     return JsonResponse({
         'short_name': f'👤 {request.user}',
         'author_name': str(request.user),
         'author_url': request.user.link if request.user.is_authenticated else '',
         'can_edit': True if (request.user == article.owner or
-                             (session_key in owner_session and
+                             (session_key in owner_sessions and
                               session_key is not None))
         else False,
     })

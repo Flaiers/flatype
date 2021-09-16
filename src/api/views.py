@@ -29,10 +29,10 @@ def try_save(request) -> JsonResponse:
             })
 
         session_key = request.session.session_key
-        owner_session = [str(session) for session in article.owner_session.all()]
+        owner_sessions = [str(session) for session in article.owner_sessions.all()]
 
         if not (request.user == article.owner or
-                (session_key in owner_session and
+                (session_key in owner_sessions and
                  session_key is not None)):
             return JsonResponse(
                 {
@@ -61,7 +61,7 @@ def try_save(request) -> JsonResponse:
                 request.session['_csrftoken'] = get_token(request)
 
             article.save()
-            article.owner_session.add(request.session.session_key)
+            article.owner_sessions.add(request.session.session_key)
 
         article.save()
 
