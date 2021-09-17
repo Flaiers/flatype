@@ -48,7 +48,6 @@ MIDDLEWARE = [
 ]
 
 CONN_MAX_AGE = None
-DOMAIN = os.getenv('DOMAIN')
 APPEND_SLASH = bool(os.getenv('APPEND_SLASH'))
 ROOT_URLCONF = 'config.urls'
 AUTH_USER_MODEL = 'ext_auth.User'
