@@ -1,8 +1,6 @@
 from core.models import Article, Storage
 from core.forms import ArticleForm, StorageForm
 
-from django.contrib.sessions.models import Session
-
 from django.middleware.csrf import get_token
 
 from django.views.decorators.http import require_http_methods
@@ -29,10 +27,11 @@ def try_save(request) -> JsonResponse:
             })
 
         session_key = request.session.session_key
+        owner_sessions = [str(session) for session in article.owner_sessions.all()]
 
         if not (request.user == article.owner or
-                (session_key == str(article.owner_session) and
-                 (session_key and article.owner_session) is not None)):
+                (session_key in owner_sessions and
+                 session_key is not None)):
             return JsonResponse(
                 {
                     'error': True,
@@ -59,8 +58,8 @@ def try_save(request) -> JsonResponse:
             if request.session.session_key is None:
                 request.session['_csrftoken'] = get_token(request)
 
-            session = Session.objects.get(pk=request.session.session_key)
-            article.owner_session = session
+            article.save()
+            article.owner_sessions.add(request.session.session_key)
 
         article.save()
 
