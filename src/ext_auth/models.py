@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
+
+from django.conf import settings
+
+from django.contrib.auth.models import AbstractUser, Permission
 
 
 class User(AbstractUser):
@@ -19,7 +22,7 @@ class User(AbstractUser):
     )
 
     def save(self, *args, **kwargs):
-        self.link = f'https://{args}/account/{self.username}'
+        self.link = f'{settings.DOMAIN}/account/{self.username}'
         super(type(self), self).save(*args, **kwargs)
 
 
