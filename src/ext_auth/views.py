@@ -54,7 +54,7 @@ def try_register(request) -> JsonResponse:
         })
 
     user = form.save(commit=False)
-    user.save()
+    user.save(request.headers.get('Host',))
 
     login(request, user)
     return JsonResponse({

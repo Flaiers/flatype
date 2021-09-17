@@ -9,5 +9,10 @@ class User(AbstractUser):
     link = models.URLField('user link', max_length=200, blank=True, null=True,
                            help_text='150 characters or fewer. Link to account on the site.')
 
+    def save(self, *args, **kwargs):
+        self.link = f'https://{args}/account/{self.username}'
+        super(type(self), self).save(*args, **kwargs)
+
+
     class Meta(AbstractUser.Meta):
         db_table = 'users'

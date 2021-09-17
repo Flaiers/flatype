@@ -1,8 +1,6 @@
 from core.models import Article, Storage
 from core.forms import ArticleForm, StorageForm
 
-from django.contrib.sessions.models import Session
-
 from django.middleware.csrf import get_token
 
 from django.views.decorators.http import require_http_methods
