@@ -13,11 +13,16 @@ from django.http import JsonResponse
 def try_check(request) -> JsonResponse:
     slug = request.POST.get('page_id',)
 
+    user = user_link = ''
+    if request.user.is_authenticated:
+        user = request.user
+        user_link = user.link
+
     if slug == '0':
         return JsonResponse({
-            'short_name': f'👤 {request.user}',
-            'author_name': str(request.user),
-            'author_url': request.user.link if request.user.is_authenticated else '',
+            'short_name': str(user),
+            'author_name': str(user),
+            'author_url': user_link,
             'can_edit': False,
         })
 
@@ -33,9 +38,9 @@ def try_check(request) -> JsonResponse:
     owner_sessions = [str(session) for session in article.owner_sessions.all()] 
 
     return JsonResponse({
-        'short_name': f'👤 {request.user}',
-        'author_name': str(request.user),
-        'author_url': request.user.link if request.user.is_authenticated else '',
+        'short_name': str(user),
+        'author_name': str(user),
+        'author_url': user_link,
         'can_edit': True if (request.user == article.owner or
                              (session_key in owner_sessions and
                               session_key is not None))
