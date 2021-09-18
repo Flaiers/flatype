@@ -21,7 +21,7 @@ services:
     image: postgres
     restart: always
     ports:
-      - 5432:5432
+      - ${PORT_DB}:5432
     volumes:
       - /usr/projects/psql/flatype_db:/var/lib/psql/data
     environment:
@@ -33,12 +33,12 @@ services:
     build: .
     container_name: flatype_web
     image: flatype_image
-    command: bash -c "cd src/ && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 config.wsgi --reload"
+    command: bash -c "cd src/ && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:${PORT_WEB} config.wsgi --reload"
     restart: always
     depends_on:
       - db
     ports:
-      - 8000:8000
+      - ${PORT_WEB}:8000
     volumes:
       - .:/usr/projects/flatype
     environment:
