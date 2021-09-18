@@ -2,7 +2,7 @@ from django.db import models
 
 from django.conf import settings
 
-from django.contrib.auth.models import AbstractUser, Permission
+from django.contrib.auth.models import AbstractUser, Permission, Group
 
 
 class User(AbstractUser):
@@ -11,15 +11,15 @@ class User(AbstractUser):
     email = models.EmailField('email address', blank=True, null=True)
     link = models.URLField('user link', max_length=200, blank=True, null=True,
                            help_text='150 characters or fewer. Link to account on the site.')
-    user_permissions = models.ManyToManyField(
-        Permission,
-        verbose_name='user_permissions',
-        db_table='auth_user_permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        related_name="user_set",
-        related_query_name="user",
-    )
+
+    groups = models.ManyToManyField(Group, db_table='user_groups', blank=True,
+                                    help_text='The groups this user belongs to. '
+                                    'A user will get all permissions granted to each of their groups.',
+                                    related_name="user_set", related_query_name="user")
+
+    user_permissions = models.ManyToManyField(Permission, db_table='user_permissions', blank=True,
+                                              help_text='Specific permissions for this user.',
+                                              related_name="user_set", related_query_name="user")
 
     def save(self, *args, **kwargs):
         self.link = f'{settings.DOMAIN}/account/{self.username}'
@@ -27,4 +27,4 @@ class User(AbstractUser):
 
 
     class Meta(AbstractUser.Meta):
-        db_table = 'auth_user'
+        db_table = 'users'
