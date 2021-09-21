@@ -28,3 +28,13 @@ class User(AbstractUser):
 
     class Meta(AbstractUser.Meta):
         db_table = 'users'
+
+
+class ProxyUser(User):
+
+    class Meta:
+        app_label = 'auth'
+        proxy = True
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
+
