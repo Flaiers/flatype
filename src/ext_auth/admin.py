@@ -1,8 +1,14 @@
 from django.contrib import admin
 from django.contrib.sessions.models import Session
 
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.admin import (
+        UserAdmin as BaseUserAdmin,
+        GroupAdmin as BaseGroupAdmin,
+    )
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+
+from .models import ProxyGroup
 
 
 UserModel = get_user_model()
@@ -16,3 +22,12 @@ class SessionAdmin(admin.ModelAdmin):
 @admin.register(UserModel)
 class UserAdmin(BaseUserAdmin):
     BaseUserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
+
+
+@admin.register(ProxyGroup)
+class GroupAdmin(BaseGroupAdmin):
+    fields = ('name', 'permissions',)
+    list_display = ('name',)
+
+
+admin.site.unregister(Group)

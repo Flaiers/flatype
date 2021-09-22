@@ -27,6 +27,7 @@ ALLOWED_HOSTS = list(os.getenv('ALLOWED_HOSTS'))
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
+    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -34,7 +35,6 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'core.apps.CoreConfig',
     'ext_auth.apps.ExtAuthConfig',
-    'ext_auth.apps.AuthConfig',
 ]
 
 MIDDLEWARE = [

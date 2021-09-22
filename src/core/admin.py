@@ -5,8 +5,12 @@ from .models import Article, Storage
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    fields = ('title', 'slug', 'author', 'owner', 'owner_sessions', 'content', 'date',)
+    fieldsets = (
+        (None, {'fields': ('title', 'slug', 'author', 'content', 'date')}),
+        ('Permissions', {'fields': ('owner', 'owner_sessions')}),
+    )
     list_display = ('title', 'slug', 'author', 'date',)
+    filter_horizontal = ('owner_sessions',)
     search_fields = ('title', 'content',)
     date_hierarchy = 'date'
 
