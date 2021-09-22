@@ -68,5 +68,5 @@ class Storage(models.Model):
 
     class Meta:
         db_table = 'storage'
-        verbose_name = "Storage object"
-        verbose_name_plural = "Storage"
+        verbose_name = 'Storage object'
+        verbose_name_plural = 'Storage'
