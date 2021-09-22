@@ -1,8 +1,14 @@
-from .models import ExternalHashId
-
 from django.contrib import admin
 from django.contrib.sessions.models import Session
-from django.contrib.auth import get_user_model, admin as auth_admin
+
+from django.contrib.auth.admin import (
+        UserAdmin as BaseUserAdmin,
+        GroupAdmin as BaseGroupAdmin,
+    )
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+
+from .models import ProxyGroup
 
 
 UserModel = get_user_model()
@@ -10,24 +16,18 @@ UserModel = get_user_model()
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
-    def get_session_data(self, obj): return obj.get_decoded()
-    get_session_data.short_description = 'session data'
-
-    list_display = ('session_key', 'get_session_data', 'expire_date',)
+    list_display = ('session_key', 'get_decoded', 'expire_date',)
 
 
-class ExternalHashIdInline(admin.TabularInline):
-    model = ExternalHashId
-    extra = 0
+@admin.register(UserModel)
+class UserAdmin(BaseUserAdmin):
+    BaseUserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
 
 
-class UserAdmin(auth_admin.UserAdmin):
+@admin.register(ProxyGroup)
+class GroupAdmin(BaseGroupAdmin):
+    fields = ('name', 'permissions',)
+    list_display = ('name',)
 
-    inlines = [
-        ExternalHashIdInline,
-    ]
 
-
-admin.site.unregister(UserModel)
-admin.site.register(UserModel, UserAdmin)
-admin.register(ExternalHashId)
+admin.site.unregister(Group)

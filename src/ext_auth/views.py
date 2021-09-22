@@ -1,4 +1,5 @@
 from core.models import Article
+from .forms import UserCreationForm
 
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -10,27 +11,59 @@ from django.http import JsonResponse
 
 
 def try_check(request) -> JsonResponse:
-    page_id = request.POST.get('page_id')
+    slug = request.POST.get('page_id',)
 
-    if page_id == '0':
+    user = user_link = ''
+    if request.user.is_authenticated:
+        user = request.user
+        user_link = user.link
+
+    if slug == '0':
         return JsonResponse({
-            'short_name': f'👤 {request.user}',
-            'author_name': str(request.user),
-            'author_url': '#' if request.user.is_authenticated else '',
-            'save_hash': '',
+            'short_name': str(user),
+            'author_name': str(user),
+            'author_url': user_link,
             'can_edit': False,
         })
 
-    article = Article.objects.get(slug=page_id)
-    owner_hash = request.session.get('externalid')
+    try:
+        article = Article.objects.get(slug=slug)
+    except Article.DoesNotExist:
+        return JsonResponse({
+            'error': True,
+            'data': 'Article not found'
+        })
+
+    session_key = request.session.session_key
+    owner_sessions = [str(session) for session in article.owner_sessions.all()] 
 
     return JsonResponse({
-        'short_name': f'👤 {request.user}',
-        'author_name': str(request.user),
-        'author_url': '#' if request.user.is_authenticated else '',
-        'save_hash': page_id,
-        'can_edit': True if request.user == article.owner \
-                    or owner_hash == article.owner_hash else False,
+        'short_name': str(user),
+        'author_name': str(user),
+        'author_url': user_link,
+        'can_edit': True if (request.user == article.owner or
+                             (session_key in owner_sessions and
+                              session_key is not None))
+        else False,
+    })
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def try_register(request) -> JsonResponse:
+    form = UserCreationForm(request.POST)
+    if not form.is_valid():
+        return JsonResponse({
+            'error': True,
+            'data': form.errors
+        })
+
+    user = form.save(commit=False)
+    user.save()
+
+    login(request, user)
+    return JsonResponse({
+        'data': 'ok'
     })
 
 
@@ -39,25 +72,19 @@ def try_check(request) -> JsonResponse:
 def try_login(request) -> JsonResponse:
     form = AuthenticationForm(data=request.POST)
     if not form.is_valid():
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'Form data is not valid'
-            },
-            status=422
-        )
+        return JsonResponse({
+            'error': True,
+            'data': form.errors
+        })
 
     if request.user.is_authenticated:
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'User already authenticated'
-            },
-            status=409
-        )
+        return JsonResponse({
+            'error': True,
+            'data': 'User already authenticated'
+        })
 
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    username = form.cleaned_data.get('username',)
+    password = form.cleaned_data.get('password',)
 
     user = authenticate(request, username=username, password=password)
     if user is None:
@@ -66,7 +93,7 @@ def try_login(request) -> JsonResponse:
                 'error': True,
                 'data': 'User not found'
             },
-            status=404
+            status=401
         )
 
     if not user.is_active:
@@ -75,7 +102,7 @@ def try_login(request) -> JsonResponse:
                 'error': True,
                 'data': 'User is locked'
             },
-            status=423
+            status=401
         )
 
     login(request, user)

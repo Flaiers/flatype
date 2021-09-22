@@ -18,8 +18,6 @@ fi
 source env/bin/activate
 pip install -U pip && pip install -r requirements.txt
 
-cd src/
-
-python manage.py collectstatic
-python manage.py migrate
-python manage.py runserver --insecure
+python src/manage.py collectstatic
+python src/manage.py migrate
+python src/manage.py runserver --insecure

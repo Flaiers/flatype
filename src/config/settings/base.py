@@ -1,25 +1,25 @@
 import os
-import environ
 
+from dotenv import load_dotenv
 from packs.types import bool
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = environ.Path(__file__) - 4
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 # reading .env file
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DEBUG"))
+DEBUG = bool(os.getenv('DEBUG'))
 
-ALLOWED_HOSTS = list(os.environ.get('ALLOWED_HOSTS'))
+ALLOWED_HOSTS = list(os.getenv('ALLOWED_HOSTS'))
 
 
 # Application definition
@@ -49,7 +49,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CONN_MAX_AGE = None
+APPEND_SLASH = bool(os.getenv('APPEND_SLASH'))
 ROOT_URLCONF = 'config.urls'
+AUTH_USER_MODEL = 'ext_auth.User'
 
 TEMPLATES = [
     {
@@ -91,15 +94,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE')
+LANGUAGE_CODE = os.getenv('LANGUAGE_CODE')
 
-TIME_ZONE = os.environ.get('TIME_ZONE')
+TIME_ZONE = os.getenv('TIME_ZONE')
 
-USE_I18N = bool(os.environ.get('USE_I18N'))
+USE_I18N = bool(os.getenv('USE_I18N'))
 
-USE_L10N = bool(os.environ.get('USE_L10N'))
+USE_L10N = bool(os.getenv('USE_L10N'))
 
-USE_TZ = bool(os.environ.get('USE_TZ'))
+DATE_FORMAT = os.getenv('DATE_FORMAT')
+
+USE_TZ = bool(os.getenv('USE_TZ'))
 
 
 # Static files (CSS, JavaScript, Images)
@@ -116,13 +121,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ALPHABET = os.environ.get('ALPHABET')
+ALPHABET = os.getenv('ALPHABET')
 
-# SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = ''
+CSRF_USE_SESSIONS = bool(os.getenv('CSRF_USE_SESSIONS'))
+CSRF_COOKIE_SECURE = bool(os.getenv('CSRF_COOKIE_SECURE'))
+CSRF_COOKIE_HTTPONLY = bool(os.getenv('CSRF_COOKIE_HTTPONLY'))
+CSRF_COOKIE_SAMESITE = os.getenv('CSRF_COOKIE_SAMESITE')
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = 251658240
-FILE_UPLOAD_MAX_MEMORY_SIZE = 251658240
+SESSION_COOKIE_AGE = int(os.getenv('SESSION_COOKIE_AGE'))
+SESSION_COOKIE_SECURE = bool(os.getenv('SESSION_COOKIE_SECURE'))
+SESSION_COOKIE_HTTPONLY = bool(os.getenv('SESSION_COOKIE_HTTPONLY'))
+SESSION_COOKIE_SAMESITE = os.getenv('SESSION_COOKIE_SAMESITE')
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv('DATA_UPLOAD_MAX_MEMORY_SIZE'))
+FILE_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv('FILE_UPLOAD_MAX_MEMORY_SIZE'))
 
 INTERNAL_IPS = [
     '127.0.0.1',

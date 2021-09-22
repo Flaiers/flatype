@@ -1,4 +1,4 @@
-from packs.hashing import GenerateDataHash
+from packs.hashing import generate_data_hash
 
 from datetime import date
 from django.conf import settings
@@ -8,6 +8,7 @@ from django.db.utils import IntegrityError
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.sessions.models import Session
 
 
 UserModel = get_user_model()
@@ -18,15 +19,16 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, db_index=True, blank=True)
     author = models.CharField(max_length=64, null=True, blank=True)
     owner = models.ForeignKey(UserModel, null=True, blank=True, on_delete=models.CASCADE)
-    owner_hash = models.CharField(max_length=32, null=True, blank=True)
-    text = models.TextField()
+    owner_sessions = models.ManyToManyField(Session, db_table='article_owners', blank=True)
+    content = models.TextField()
     date = models.DateField(default=date.today)
 
-    def __str__(self) -> str: return self.slug
+    def __str__(self) -> str:
+        return self.slug
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w)for w in self.title.lower())) + \
+            self.slug = slugify(''.join(eval(settings.ALPHABET).get(w, w) for w in self.title.lower())) + \
                         self.date.strftime('-%m-%d')
         try:
             super(type(self), self).save(*args, **kwargs)
@@ -42,23 +44,29 @@ class Article(models.Model):
 
             super(type(self), self).save(*args, **kwargs)
 
+    class Meta:
+        db_table = 'articles'
+
 
 class Storage(models.Model):
-    hash = models.CharField(max_length=255, unique=True, db_index=True, blank=True)
+    hash = models.CharField(max_length=255, unique=True, db_index=True, null=True, blank=True)
+    use_hash = models.BooleanField(default=True)
     file = models.FileField(unique=True, db_index=True)
     date = models.DateField(default=date.today)
 
     def __str__(self) -> str: return str(self.file)
 
     def save(self, *args, **kwargs):
-        self.hash = GenerateDataHash(kwargs.get('bytes'), type(self))
-        if type(self.hash) is bytes:
-            return self.hash.decode()
+        salt = 'django.core.models.Storage'
+        if self.use_hash:
+            self.hash = generate_data_hash(salt, kwargs.get('bytes'), type(self))
+            if type(self.hash) is bytes:
+                return self.hash.decode()
 
-        self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
+            self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
         super(type(self), self).save()
 
-
     class Meta:
-        verbose_name = "Storage object"
-        verbose_name_plural = "Storage"
+        db_table = 'storage'
+        verbose_name = 'Storage object'
+        verbose_name_plural = 'Storage'

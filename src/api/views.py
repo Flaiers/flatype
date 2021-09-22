@@ -1,118 +1,70 @@
-from django.contrib.auth.forms import UserCreationForm
-
 from core.models import Article, Storage
 from core.forms import ArticleForm, StorageForm
 
-from ext_auth.models import ExternalHashId
-
-from packs.hashing import GenerateRandomHash
+from django.middleware.csrf import get_token
 
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import login
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 
-@csrf_exempt
 @require_http_methods(["POST"])
-def try_register(request) -> JsonResponse:
-    form = UserCreationForm(request.POST)
-    if not form.is_valid():
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'Form data is not valid'
-            },
-            status=422
-        )
-
-    user = form.save(commit=False)
-    user.first_name = request.POST.get('first_name', '')
-    user.last_name = request.POST.get('last_name', '')
-    user.email = request.POST.get('email', '')
-    user.save()
-
-    if owner_hash := request.session.get('externalid'):
-        ExternalHashId.objects.create(user=user, session=owner_hash)
-
-        articles = Article.objects.filter(owner_hash=owner_hash)
-        for article in articles:
-            article.owner = user
-            article.save()
-
-    login(request, user)
-    return JsonResponse({
-        'data': 'ok'
-    })
-
-
-@require_http_methods(["POST"])
-def try_save(request):
+def try_save(request) -> JsonResponse:
     form = ArticleForm(request.POST)
-
     if not form.is_valid():
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'Form data is not valid'
-            },
-            status=422
-        )
-    
-    slug = request.POST.get('save_hash')
-    if slug != '':
-        owner_hash = request.session.get('externalid')
+        return JsonResponse({
+            'error': True,
+            'data': form.errors
+        })
 
+    slug = form.data.get('page_id',)
+    if slug != '0':
         try:
             article = Article.objects.get(slug=slug)
+        except Article.DoesNotExist:
+            return JsonResponse({
+                'error': True,
+                'data': 'Article not found'
+            })
 
-            if not (request.user == article.owner or owner_hash == article.owner_hash):
-                return JsonResponse(
-                    {
-                        'error': True,
-                        'data': 'Forbidden'
-                    },
-                    status=403
-                )
+        session_key = request.session.session_key
+        owner_sessions = [str(session) for session in article.owner_sessions.all()]
 
-        except Exception:
+        if not (request.user == article.owner or
+                (session_key in owner_sessions and
+                 session_key is not None)):
             return JsonResponse(
                 {
                     'error': True,
-                    'data': 'Article not found'
+                    'data': 'Forbidden'
                 },
-                status=404
+                status=403
             )
 
-        article.title = request.POST.get('title')
+        article.title = form.cleaned_data.get('title',)
+        article.author = form.cleaned_data.get('author',)
+        article.content = form.cleaned_data.get('content',)
 
-        if request.POST.get('author'):
-            article.author = request.POST.get('author')
-
-        if request.user.is_authenticated and owner_hash and article.owner is None:
+        if request.user.is_authenticated and session_key and article.owner is None:
             article.owner = request.user
 
-        article.text = request.POST.get('text')
         article.save()
 
     else:
         article = form.save(commit=False)
 
-        if article.author is None:
-            article.author = request.user
-
         if request.user.is_authenticated:
             article.owner = request.user
         else:
-            if owner_hash := request.session.get('externalid'):
-                article.owner_hash = owner_hash
-            else:
-                article.owner_hash = GenerateRandomHash(Article)
-                request.session['externalid'] = article.owner_hash
+            if request.session.session_key is None:
+                request.session['_csrftoken'] = get_token(request)
+
+            article.save()
+            article.owner_sessions.add(request.session.session_key)
 
         article.save()
 
     return JsonResponse({
+        'page_id': article.slug,
         'path': article.slug
     })
 
@@ -121,24 +73,19 @@ def try_save(request):
 def try_upload(request) -> JsonResponse:
     form = StorageForm(request.POST, request.FILES)
     if not form.is_valid():
-        return JsonResponse(
-            {
-                'error': True,
-                'data': 'Form data is not valid'
-            },
-            status=422
-        )
+        return JsonResponse({
+            'error': True,
+            'data': form.errors
+        })
 
-    file = request.FILES.get('file')
+    file = request.FILES.get('file',)
     instance = Storage(file=file)
     object = instance.save(type=file.content_type.split('/')[-1], bytes=file.read())
-
-    object = instance if object is None else object
 
     return JsonResponse(
         [
             {
-                'src': f'/media/{object}'
+                'src': f'/media/{instance if object is None else object}'
             }
         ],
         safe=False

@@ -1,9 +1,13 @@
-{% load i18n static %}<!DOCTYPE html>
-<html>
+{% load static %}<!DOCTYPE html>
+<html lang="en">
   <head>
     <title>{% block title %}{% endblock %}Flatype</title>
-    <meta name="viewport" content="width=device-width">
-
+    <meta name="viewport" content="width=device-width" />
+    <meta property="og:title" content="{{ title }}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="Flatype is a minimalist publishing tool that allows you to create articles and push them to the Web in just a click." />
+    <meta property="og:image" content="{% static '/img/logo.png' %}" />
+    <meta property="og:site_name" content="Flatype" />
     <link rel="shortcut icon" href="{% static '/img/logo.png' %}" type="image/png" />
     <link rel="stylesheet" href="{% static 'css/quill.core.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/core.min.css' %}" />
@@ -51,6 +55,7 @@
     </div>
     <div id="_tl_alerts" class="tl_alerts"></div>
     {% csrf_token %}
+
     {% block script %}{% endblock %}
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/jquery.selection.min.js' %}"></script>
