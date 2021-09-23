@@ -13,7 +13,7 @@ class ArticleAdmin(admin.ModelAdmin):
     filter_horizontal = ('owner_sessions',)
     search_fields = ('title', 'content',)
     date_hierarchy = 'date'
-    ordering = ('date',)
+    ordering = ('-date',)
 
     def get_readonly_fields(self, request, obj=None) -> tuple:
         if obj:
@@ -28,7 +28,7 @@ class StorageAdmin(admin.ModelAdmin):
     list_display = ('file', 'hash', 'date',)
     list_display_links = ('date',)
     date_hierarchy = 'date'
-    ordering = ('date',)
+    ordering = ('-date',)
 
     def get_readonly_fields(self, request, obj=None) -> tuple:
         if obj:

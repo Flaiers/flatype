@@ -20,7 +20,7 @@ class SessionAdmin(admin.ModelAdmin):
     list_display = ('session_key', 'get_decoded', 'expire_date',)
     search_fields = ('session_key',)
     date_hierarchy = 'expire_date'
-    ordering = ('expire_date',)
+    ordering = ('-expire_date',)
 
 
 @admin.register(UserModel)
