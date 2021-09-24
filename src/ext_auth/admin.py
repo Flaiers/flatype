@@ -16,7 +16,11 @@ UserModel = get_user_model()
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
+    fields = ('session_key', 'session_data', 'expire_date',)
     list_display = ('session_key', 'get_decoded', 'expire_date',)
+    search_fields = ('session_key',)
+    date_hierarchy = 'expire_date'
+    ordering = ('-expire_date',)
 
 
 @admin.register(UserModel)
