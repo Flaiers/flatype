@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 
 from django.contrib.auth.models import AbstractUser, Permission, Group
+from django.contrib.admin.models import LogEntry
 
 
 class ProxyGroup(Group):
@@ -13,6 +14,16 @@ class ProxyGroup(Group):
         proxy = True
         verbose_name = 'group'
         verbose_name_plural = 'groups'
+
+
+class ProxyLogEntry(LogEntry):
+
+    class Meta:
+        app_label = 'admin'
+        db_table = 'admin_log'
+        proxy = True
+        verbose_name = 'Admin log object'
+        verbose_name_plural = 'Admin logs'
 
 
 class User(AbstractUser):

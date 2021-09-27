@@ -8,7 +8,7 @@ from django.contrib.auth.admin import (
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 
-from .models import ProxyGroup
+from .models import ProxyGroup, ProxyLogEntry
 
 
 UserModel = get_user_model()
@@ -32,6 +32,18 @@ class UserAdmin(BaseUserAdmin):
 class GroupAdmin(BaseGroupAdmin):
     fields = ('name', 'permissions',)
     list_display = ('name',)
+
+
+@admin.register(ProxyLogEntry)
+class LogEntryAdmin(admin.ModelAdmin):
+    def get_message(self, obj): return obj
+    get_message.short_description = 'message'
+
+    list_display = ('get_message', 'action_time',)
+    list_filter = ('action_flag', 'content_type',)
+    search_fields = ('user', 'change_message',)
+    date_hierarchy = 'action_time'
+    ordering = ('-action_time',)
 
 
 admin.site.unregister(Group)
