@@ -1,1 +1,1 @@
-docker-compose -f deployment/docker-compose_dev.yml --env-file deployment/.env up -d
+docker-compose -f deployment/dev/docker-compose.yml --env-file deployment/.env up -d
