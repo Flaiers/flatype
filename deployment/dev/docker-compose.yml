@@ -21,7 +21,7 @@ services:
     ports:
       - ${PORT_DB}:5432
     volumes:
-      - ../../db_dev:/var/lib/psql/data
+      - ../../db_dev:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD
       - POSTGRES_USER
