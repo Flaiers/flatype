@@ -7,13 +7,11 @@ services:
     restart: always
     ports:
       - 80:80
-      - 443:443
     depends_on:
       - web
     volumes:
-      - ./static:/usr/projects/flatype/static
-      - ./media:/usr/projects/flatype/media
-      - ./nginx/letsencrypt:/etc/letsencrypt
+      - ../../static:/opt/flatype/static
+      - ../../media:/opt/flatype/media
       - ./nginx:/etc/nginx/conf.d
 
   db:
@@ -23,23 +21,27 @@ services:
     ports:
       - ${PORT_DB}:5432
     volumes:
-      - /usr/projects/psql/flatype_db:/var/lib/psql/data
+      - ../../db_dev:/var/lib/psql/data
     environment:
       - POSTGRES_PASSWORD
       - POSTGRES_USER
       - POSTGRES_DB
 
   web:
-    build: .
+    build:
+      context:  ../..
+      dockerfile: deployment/Dockerfile
+
     container_name: flatype_web
     image: flatype_image
-    command: bash -c "cd src/ && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:${PORT_WEB} config.wsgi --reload"
+    command: bash -c "cd src/ && python manage.py migrate &&
+                      python manage.py collectstatic --noinput &&
+                      gunicorn --bind 0.0.0.0:${PORT_WEB} config.asgi:application -k uvicorn.workers.UvicornWorker --reload"
     restart: always
     depends_on:
       - db
     ports:
       - ${PORT_WEB}:8000
     volumes:
-      - .:/usr/projects/flatype
-    environment:
-      - LEVEL
+      - ../../static:/opt/flatype/static
+      - ../../media:/opt/flatype/media

@@ -16,7 +16,7 @@ else
 fi
 
 source env/bin/activate
-pip install -U pip && pip install -r requirements.txt
+pip install -U pip && pip install -r src/requirements.txt
 
 python src/manage.py collectstatic
 python src/manage.py migrate
