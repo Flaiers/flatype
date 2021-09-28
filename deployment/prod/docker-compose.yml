@@ -38,9 +38,12 @@ services:
     image: flatype_image
     command: bash -c "cd src/ && python manage.py migrate &&
                       python manage.py collectstatic --noinput &&
-                      gunicorn --bind 0.0.0.0:${PORT_WEB} config.wsgi --reload"
+                      gunicorn --bind 0.0.0.0:${PORT_WEB} config.asgi:application -k uvicorn.workers.UvicornWorker --reload"
     restart: always
     depends_on:
       - db
     ports:
       - ${PORT_WEB}:8000
+    volumes:
+      - ../../static:/opt/flatype/static
+      - ../../media:/opt/flatype/media
