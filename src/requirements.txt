@@ -2,6 +2,7 @@ asgiref
 DateTime
 Django
 gunicorn
+uvicorn
 python-dotenv
 django-jazzmin
 pytz
