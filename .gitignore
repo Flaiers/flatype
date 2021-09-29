@@ -138,3 +138,7 @@ dmypy.json
 .vscode/
 
 letsencrypt/
+
+# db directories
+/db_dev
+/db
