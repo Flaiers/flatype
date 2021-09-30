@@ -5,6 +5,7 @@ from .models import Article, Storage
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
+
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'author', 'content', 'date')}),
         ('Permissions', {'fields': ('owner', 'owner_sessions')}),
@@ -23,6 +24,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Storage)
 class StorageAdmin(admin.ModelAdmin):
+
     fields = ('hash', 'file', 'date', 'use_hash',)
     search_fields = ('file', 'hash', 'date',)
     list_display = ('file', 'hash', 'date',)

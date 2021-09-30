@@ -16,6 +16,7 @@ UserModel = get_user_model()
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
+
     fields = ('session_key', 'session_data', 'expire_date',)
     list_display = ('session_key', 'get_decoded', 'expire_date',)
     search_fields = ('session_key',)
@@ -25,17 +26,20 @@ class SessionAdmin(admin.ModelAdmin):
 
 @admin.register(UserModel)
 class UserAdmin(BaseUserAdmin):
+
     BaseUserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
 
 
 @admin.register(ProxyGroup)
 class GroupAdmin(BaseGroupAdmin):
+
     fields = ('name', 'permissions',)
     list_display = ('name',)
 
 
 @admin.register(ProxyLogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
+
     def get_message(self, obj): return obj
     get_message.short_description = 'message'
 

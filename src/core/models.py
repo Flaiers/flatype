@@ -15,6 +15,7 @@ UserModel = get_user_model()
 
 
 class Article(models.Model):
+
     title = models.CharField(max_length=150)
     slug = models.SlugField(unique=True, db_index=True, blank=True)
     author = models.CharField(max_length=64, null=True, blank=True)
@@ -46,9 +47,12 @@ class Article(models.Model):
 
     class Meta:
         db_table = 'articles'
+        verbose_name = 'Article'
+        verbose_name_plural = 'Articles'
 
 
 class Storage(models.Model):
+
     hash = models.CharField(max_length=255, unique=True, db_index=True, null=True, blank=True)
     use_hash = models.BooleanField(default=True)
     file = models.FileField(unique=True, db_index=True)
@@ -63,7 +67,7 @@ class Storage(models.Model):
             if type(self.hash) is bytes:
                 return self.hash.decode()
 
-            self.file.name = f"{self.hash[:16]}.{kwargs.get('type')}"
+            self.file.name = f"{self.hash[:32]}.{kwargs.get('type')}"
         super(type(self), self).save()
 
     class Meta:
