@@ -27,6 +27,7 @@ class ProxyLogEntry(LogEntry):
 
 
 class User(AbstractUser):
+
     first_name = models.CharField(max_length=150, blank=True, null=True)
     last_name = models.CharField(max_length=150, blank=True, null=True)
     email = models.EmailField('email address', blank=True, null=True)
@@ -49,3 +50,5 @@ class User(AbstractUser):
 
     class Meta(AbstractUser.Meta):
         db_table = 'users'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
