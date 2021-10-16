@@ -34,9 +34,8 @@ class Article(models.Model):
         try:
             super(type(self), self).save(*args, **kwargs)
         except IntegrityError:
-            exists_slug = []
             articles = type(self).objects.all()
-            [exists_slug.append(article.slug) if self.slug in article.slug else None for article in articles]
+            exists_slug = [article.slug if self.slug in article.slug else None for article in articles]
             if len(exists_slug) != 1:
                 number = [int(exist_slug.split('-')[-1]) for exist_slug in exists_slug][-1] + 1
                 self.slug += f'-{number}'
@@ -63,11 +62,15 @@ class Storage(models.Model):
     def save(self, *args, **kwargs):
         salt = 'django.core.models.Storage'
         if self.use_hash:
-            self.hash = generate_data_hash(salt, kwargs.get('bytes'), type(self))
-            if type(self.hash) is bytes:
-                return self.hash.decode()
+            byte = self.file.read()
 
-            self.file.name = f"{self.hash[:32]}.{kwargs.get('type')}"
+            self.hash = generate_data_hash(salt, byte, type(self))
+            if type(self.hash) is bytes:
+                return
+
+            content_type = self.file.file.content_type.split('/')[-1]
+            self.file.name = f'{self.hash[:32]}.{content_type}'
+
         super(type(self), self).save()
 
     class Meta:
