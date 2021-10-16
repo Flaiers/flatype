@@ -79,13 +79,13 @@ def try_upload(request) -> JsonResponse:
         })
 
     file = request.FILES.get('file',)
-    instance = Storage(file=file).save()
-    object = instance
+    instance = Storage(file=file)
+    object = instance.save()
 
     return JsonResponse(
         [
             {
-                'src': f'/media/{instance if object is None else object}'
+                'src': object if object else instance.file.url
             }
         ],
         safe=False

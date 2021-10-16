@@ -66,7 +66,7 @@ class Storage(models.Model):
 
             self.hash = generate_data_hash(salt, byte, type(self))
             if type(self.hash) is bytes:
-                return
+                return self.hash.decode()
 
             content_type = self.file.file.content_type.split('/')[-1]
             self.file.name = f'{self.hash[:32]}.{content_type}'
