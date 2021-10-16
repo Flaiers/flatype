@@ -37,13 +37,15 @@ MIDDLEWARE = [
 
 CONN_MAX_AGE = None
 APPEND_SLASH = bool(os.getenv('APPEND_SLASH'))
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'routers'
 AUTH_USER_MODEL = 'ext_auth.User'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'src', 'core', 'templates', 'exceptions')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -57,6 +59,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -87,10 +90,10 @@ DATE_FORMAT = os.getenv('DATE_FORMAT')
 USE_TZ = bool(os.getenv('USE_TZ'))
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'public', 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public', 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

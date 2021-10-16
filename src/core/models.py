@@ -24,8 +24,7 @@ class Article(models.Model):
     content = models.TextField()
     date = models.DateField(default=date.today)
 
-    def __str__(self) -> str:
-        return self.slug
+    def __str__(self): return str(self.slug)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -58,7 +57,7 @@ class Storage(models.Model):
     file = models.FileField(unique=True, db_index=True)
     date = models.DateField(default=date.today)
 
-    def __str__(self) -> str: return str(self.file)
+    def __str__(self): return str(self.file)
 
     def save(self, *args, **kwargs):
         salt = 'django.core.models.Storage'
