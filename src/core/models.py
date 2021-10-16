@@ -1,4 +1,4 @@
-from packs.hashing import generate_data_hash
+from packs import generate_data_hash
 
 from datetime import date
 from django.conf import settings

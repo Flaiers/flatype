@@ -9,7 +9,6 @@ load_dotenv(os.path.join(BASE_DIR, 'deployment', '.env'))
 
 DOMAIN = os.getenv('DOMAIN')
 
-CSRF_USE_SESSIONS = bool(os.getenv('CSRF_USE_SESSIONS'))
 CSRF_COOKIE_SECURE = bool(os.getenv('CSRF_COOKIE_SECURE'))
 CSRF_COOKIE_HTTPONLY = bool(os.getenv('CSRF_COOKIE_HTTPONLY'))
 CSRF_COOKIE_SAMESITE = os.getenv('CSRF_COOKIE_SAMESITE')
