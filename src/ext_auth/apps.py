@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+
 from packs import rename_tables
 
 

@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 
 import os
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
 # reading ./deployment/.env file

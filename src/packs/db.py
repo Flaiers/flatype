@@ -1,4 +1,3 @@
-
 def rename_tables():
 
     from django.db.migrations.recorder import MigrationRecorder

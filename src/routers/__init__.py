@@ -3,9 +3,10 @@ from django.conf import settings
 from django.contrib import admin
 
 from .main_router import urlpatterns as main
+from .core_router import urlpatterns as core
 
 
-urlpatterns = main
+urlpatterns = main + core
 
 admin.site.site_header = "Flatype Admin"
 admin.site.site_title = "Flatype Admin"

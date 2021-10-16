@@ -1,12 +1,13 @@
 from packs import generate_data_hash
 
 from datetime import date
+
 from django.conf import settings
 from django.utils.text import slugify
 
+from django.db import models
 from django.db.utils import IntegrityError
 
-from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 

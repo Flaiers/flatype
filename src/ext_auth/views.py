@@ -1,10 +1,11 @@
 from core.models import Article
+
 from .forms import UserCreationForm
 
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
 
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 
 from django.http import JsonResponse
