@@ -1,5 +1,6 @@
 from django.apps import AppConfig
-from .db import rename_tables
+
+from packs import rename_tables
 
 
 class ExtAuthConfig(AppConfig):

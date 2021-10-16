@@ -1,7 +1,11 @@
-from .base import os, BASE_DIR
+from dotenv import load_dotenv
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
+# reading ./deployment/example.env file
+load_dotenv(os.path.join(BASE_DIR, 'deployment', 'example.env'))
 
 DOMAIN = os.getenv('LOCAL_DOMAIN')
 

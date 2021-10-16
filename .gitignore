@@ -130,14 +130,10 @@ dmypy.json
 .pyre/
 
 # staticfiles
-/media
-/assets
-/static
+public/
 
 .idea/
 .vscode/
-
-letsencrypt/
 
 # db directories
 /db_dev

@@ -75,17 +75,17 @@ def try_upload(request) -> JsonResponse:
     if not form.is_valid():
         return JsonResponse({
             'error': True,
-            'data': form.errors
+            'details': form.errors
         })
 
     file = request.FILES.get('file',)
     instance = Storage(file=file)
-    object = instance.save(type=file.content_type.split('/')[-1], bytes=file.read())
+    object = instance.save()
 
     return JsonResponse(
         [
             {
-                'src': f'/media/{instance if object is None else object}'
+                'src': object if object else instance.file.url
             }
         ],
         safe=False

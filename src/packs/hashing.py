@@ -11,14 +11,14 @@ def generate_random_hash() -> str:
     return hash
 
 
-def generate_data_hash(salt=None, data=None, model=None) -> str:
+def generate_data_hash(salt=None, data=None, model=None) -> str | bytes:
     if salt is None:
         salt = 'django.packs.hashing.generate_data_hash'
     hash = salted_hmac(salt, data, algorithm=settings.DEFAULT_HASHING_ALGORITHM).hexdigest()
 
     if model is not None:
-        hash_exist = model.objects.filter(hash=hash)
+        hash_exist = model.objects.filter(hash=hash).first()
 
-    hash = str(hash_exist.first()).encode() if hash_exist else hash
+    hash = hash_exist.file.url.encode() if hash_exist else hash
 
     return hash
