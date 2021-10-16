@@ -130,9 +130,7 @@ dmypy.json
 .pyre/
 
 # staticfiles
-media/
-assets/
-static/
+public/
 
 .idea/
 .vscode/
