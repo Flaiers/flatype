@@ -10,6 +10,8 @@ from django.contrib.auth.models import Group
 
 from .models import ProxyGroup, ProxyLogEntry
 
+import copy
+
 
 UserModel = get_user_model()
 
@@ -27,7 +29,13 @@ class SessionAdmin(admin.ModelAdmin):
 @admin.register(UserModel)
 class UserAdmin(BaseUserAdmin):
 
-    BaseUserAdmin.fieldsets[0][1]['fields'] = ('username', 'link', 'password')
+    list_display = ('username', 'email', 'is_superuser', 'is_active')
+    readonly_fields = ('link',)
+
+    def get_fieldsets(self, request, obj):
+        fieldsets = copy.deepcopy(self.fieldsets)
+        fieldsets[0][1]['fields'] = ('username', 'link', 'password')
+        return fieldsets
 
 
 @admin.register(ProxyGroup)
@@ -40,14 +48,15 @@ class GroupAdmin(BaseGroupAdmin):
 @admin.register(ProxyLogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
 
-    def get_message(self, obj): return obj
-    get_message.short_description = 'message'
-
-    list_display = ('get_message', 'action_time',)
+    list_display = ('get_message', 'user', 'action_time',)
+    search_fields = ('user', 'object_repr', 'change_message',)
     list_filter = ('action_flag', 'content_type',)
-    search_fields = ('user', 'change_message',)
+    autocomplete_fields = ('user',)
     date_hierarchy = 'action_time'
     ordering = ('-action_time',)
+
+    def get_message(self, obj): return obj
+    get_message.short_description = 'message'
 
 
 admin.site.unregister(Group)

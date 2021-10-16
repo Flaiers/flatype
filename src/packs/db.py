@@ -7,16 +7,12 @@ def rename_tables():
     from django.contrib.sessions.models import Session
     from django.contrib.admin.models import LogEntry
 
-    from django.db import models
-
 
     MigrationRecorder.Migration()
 
     Group._meta.db_table = 'groups'
     Group._meta.original_attrs['db_table'] = 'groups'
-
-    Group.permissions = models.ManyToManyField(Permission,
-        verbose_name='permissions', blank=True, db_table='group_permissions')
+    Group.permissions.db_table = 'group_permissions'
 
     Permission._meta.db_table = 'permissions'
     Permission._meta.original_attrs['db_table'] = 'permissions'
