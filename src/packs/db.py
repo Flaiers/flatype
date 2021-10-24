@@ -2,22 +2,12 @@ def rename_tables() -> None:
 
     from django.db.migrations.recorder import MigrationRecorder
     from django.contrib.contenttypes.models import ContentType
-    from django.contrib.auth.models import User, Group, Permission
+    from django.contrib.auth.models import Group, Permission
     from django.contrib.sessions.models import Session
     from django.contrib.admin.models import LogEntry
 
     '''Init Migration class'''
     MigrationRecorder.Migration()
-
-    '''Edit db_tables in M2M fields User model'''
-    User.groups.db_table = 'user_groups'
-    User.user_permissions.db_table = 'user_permissions'
-    User._meta.get_field('groups').db_table = 'user_groups'
-    User._meta.get_field('user_permissions').db_table = 'user_permissions'
-
-    '''Edit db_table of User model'''
-    User._meta.db_table = 'users'
-    User._meta.original_attrs['db_table'] = 'users'
 
     '''Edit db_table in M2M field Group model'''
     Group.permissions.db_table = 'group_permissions'
