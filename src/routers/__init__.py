@@ -12,10 +12,10 @@ admin.site.site_header = "Flatype Admin"
 admin.site.site_title = "Flatype Admin"
 admin.site.index_title = "Welcome to Flatype Admin Panel"
 
-handler400 = "core.exceptions.bad_request"
-handler403 = "core.exceptions.permission_denied"
-handler404 = "core.exceptions.page_not_found"
-handler500 = "core.exceptions.server_error"
+handler400 = "apps.core.exceptions.bad_request"
+handler403 = "apps.core.exceptions.permission_denied"
+handler404 = "apps.core.exceptions.page_not_found"
+handler500 = "apps.core.exceptions.server_error"
 
 if settings.DEBUG:
     from django.conf.urls.static import static

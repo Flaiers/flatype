@@ -1,4 +1,4 @@
-from core.models import Article
+from apps.core.models import Article
 
 from .forms import UserCreationForm
 
