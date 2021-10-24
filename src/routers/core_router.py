@@ -1,6 +1,6 @@
 from django.urls import path
 
-from core import views as views_core
+from apps.core import views as views_core
 
 
 urlpatterns = [

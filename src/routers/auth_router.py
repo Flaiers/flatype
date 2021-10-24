@@ -1,6 +1,6 @@
 from django.urls import path
 
-from ext_auth import views as views_auth
+from apps.ext_auth import views as views_auth
 
 
 urlpatterns = [

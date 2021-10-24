@@ -1,5 +1,5 @@
-from core.models import Article, Storage
-from core.forms import ArticleForm, StorageForm
+from apps.core.models import Article, Storage
+from apps.core.forms import ArticleForm, StorageForm
 
 from django.middleware.csrf import get_token
 

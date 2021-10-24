@@ -4,21 +4,24 @@ python_interpreter=""
 read -p "┌────────────────────┐
 | Python interpreter |
 └────────────────────┘
-Default: /usr/bin/python3
+Default: /usr/bin/python
 (Сlick Enter for choose default)
 If you wont to change, write: " python_interpreter
 
 
 if [ -z "$python_interpreter" ]; then
-    /usr/bin/python3 -m venv env
+    /usr/bin/python -m venv env
 else
     `$python_interpreter -m venv env`
 fi
 
 source env/bin/activate
-pip install -U pip && pip install -r src/requirements.txt
+cd src/
 
-python src/manage.py collectstatic --noinput
-python src/manage.py makemigrations
-python src/manage.py migrate
-python src/manage.py runserver --insecure
+pip install -U pip && pip install -r requirements.txt
+
+python manage.py collectstatic --noinput
+python manage.py makemigrations --name alter_db_table
+python manage.py migrate
+python build.py
+python manage.py runserver --insecure
