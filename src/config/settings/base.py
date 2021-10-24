@@ -2,8 +2,10 @@ import os
 
 from packs import bool
 
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+
+BASE_DIR = Path(__file__).parent.parent.parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
@@ -20,9 +22,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api.apps.ApiConfig',
-    'core.apps.CoreConfig',
-    'ext_auth.apps.ExtAuthConfig',
+
+    # Your apps
+    'apps.api.conf.ApiConfig',
+    'apps.core.conf.CoreConfig',
+    'apps.ext_auth.conf.ExtAuthConfig'
 ]
 
 MIDDLEWARE = [

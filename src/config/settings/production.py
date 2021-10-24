@@ -1,9 +1,11 @@
-from dotenv import load_dotenv
-
 import os
 
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from dotenv import load_dotenv
+
+
+BASE_DIR = Path(__file__).parent.parent.parent.parent
 
 # reading ./deployment/.env file
 load_dotenv(os.path.join(BASE_DIR, 'deployment', '.env'))
@@ -22,10 +24,10 @@ SESSION_COOKIE_SAMESITE = os.getenv('SESSION_COOKIE_SAMESITE')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT_DB'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
