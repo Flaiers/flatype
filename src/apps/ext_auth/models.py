@@ -1,9 +1,8 @@
-from django.db import models
-
-from django.conf import settings
-
 from django.contrib.auth.models import AbstractUser, Permission, Group
 from django.contrib.admin.models import LogEntry
+
+from django.conf import settings
+from django.db import models
 
 
 class ProxyGroup(Group):

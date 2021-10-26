@@ -1,14 +1,16 @@
-from apps.core.models import Article
-
-from .forms import UserCreationForm
-
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login, logout
-
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 
 from django.http import JsonResponse
+
+from apps.core.models import Article
+
+from .forms import UserCreationForm
+
+from django.contrib.auth import (
+    authenticate, login,
+    logout, forms
+)
 
 
 def try_check(request) -> JsonResponse:
@@ -71,7 +73,7 @@ def try_register(request) -> JsonResponse:
 @csrf_exempt
 @require_http_methods(["POST"])
 def try_login(request) -> JsonResponse:
-    form = AuthenticationForm(data=request.POST)
+    form = forms.AuthenticationForm(data=request.POST)
     if not form.is_valid():
         return JsonResponse({
             'error': True,

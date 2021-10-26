@@ -1,6 +1,6 @@
-from .models import Article
-
 from django.views.generic import TemplateView, DetailView
+
+from .models import Article
 
 
 class Create(TemplateView):

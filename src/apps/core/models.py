@@ -1,15 +1,16 @@
-from packs import generate_data_hash
+from django.contrib.sessions.models import Session
+from django.contrib.auth import get_user_model
 
-from datetime import date
-
-from django.conf import settings
-from django.utils.text import slugify
-
-from django.db import models
 from django.db.utils import IntegrityError
 
-from django.contrib.auth import get_user_model
-from django.contrib.sessions.models import Session
+from django.utils.text import slugify
+
+from packs import generate_data_hash
+
+from django.conf import settings
+from django.db import models
+
+from datetime import date
 
 
 UserModel = get_user_model()
