@@ -1,5 +1,4 @@
 from django.conf import settings
-
 from django.contrib import admin
 
 from .main_router import urlpatterns as main
@@ -10,7 +9,7 @@ urlpatterns = main + core
 
 admin.site.site_header = "Flatype Admin"
 admin.site.site_title = "Flatype Admin"
-admin.site.index_title = "Welcome to Flatype Admin Panel"
+admin.site.index_title = "Welcome to flatype Admin Panel"
 
 handler400 = "apps.core.exceptions.bad_request"
 handler403 = "apps.core.exceptions.permission_denied"
