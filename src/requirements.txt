@@ -1,8 +1,8 @@
 Django
-gunicorn
 uvicorn
-python-dotenv
-django-jazzmin
+gunicorn
 requests
 DateTime
+python-dotenv
+django-jazzmin
 psycopg2-binary
