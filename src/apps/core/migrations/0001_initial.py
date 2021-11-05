@@ -9,8 +9,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('sessions', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('sessions', '0002_alter_db_table'),
     ]
 
     operations = [

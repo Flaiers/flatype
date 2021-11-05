@@ -35,10 +35,9 @@ class Article(models.Model):
         try:
             super(type(self), self).save(*args, **kwargs)
         except IntegrityError:
-            articles = type(self).objects.all()
-            exists_slug = [article.slug if self.slug in article.slug else None for article in articles]
-            if len(exists_slug) != 1:
-                number = [int(exist_slug.split('-')[-1]) for exist_slug in exists_slug][-1] + 1
+            articles = type(self).objects.filter(slug__icontains=self.sulg)
+            if len(articles) != 1:
+                number = int(articles.last().slug.split('-')[-1]) + 1
                 self.slug += f'-{number}'
             else:
                 self.slug += '-2'
