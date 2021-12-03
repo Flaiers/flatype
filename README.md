@@ -1,6 +1,10 @@
 [Flatype](https://fla.codes/)
 =============================
 
+[![Release](https://img.shields.io/github/release/Flaiers/flatype.svg)](https://github.com/Flaiers/flatype/releases/latest)
+[![Licence](https://img.shields.io/github/license/Flaiers/flatype)](https://github.com/Flaiers/flatype/blob/master/LICENSE)
+[![Workflow](https://img.shields.io/github/workflow/status/Flaiers/flatype/Flatype%20Notify/main)](https://github.com/Flaiers/flatype/blob/main/.github/workflows/notify.yml)
+
 ### The blog platform, idea taken from:
 
 <a href="https://telegra.ph/">
