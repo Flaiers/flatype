@@ -1,8 +1,8 @@
-from django.conf import settings
-from django.contrib import admin
-
 from .main_router import urlpatterns as main
 from .core_router import urlpatterns as core
+
+from django.conf import settings
+from django.contrib import admin
 
 
 urlpatterns = main + core
