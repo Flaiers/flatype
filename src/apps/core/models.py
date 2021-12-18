@@ -60,16 +60,16 @@ class Storage(models.Model):
     def __str__(self): return str(self.file)
 
     def save(self, *args, **kwargs):
-        salt = 'django.core.models.Storage'
-        if self.use_hash:
-            byte = self.file.read()
+        if self.use_hash and not self.id:
+            salt = 'django.storage.models.Storage'
+            bytearray = self.file.read()
 
-            self.hash = generate_data_hash(salt, byte, type(self))
-            if type(self.hash) is bytes:
-                return self.hash.decode()
+            self.hash = generate_data_hash(salt, bytearray, type(self))
+            if type(self.hash) is type(self):
+                return self.hash
 
             content_type = self.file.file.content_type.split('/')[-1]
-            self.file.name = f'{self.hash[:32]}.{content_type}'
+            self.file.name = '{:.32}.{}'.format(self.hash, content_type)
 
         super(type(self), self).save()
 
