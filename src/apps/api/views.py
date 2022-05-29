@@ -86,7 +86,7 @@ def try_upload(request) -> JsonResponse:
     return JsonResponse(
         [
             {
-                'src': object if object else instance.file.url
+                'src': object.file.url if object else instance.file.url
             }
         ],
         safe=False

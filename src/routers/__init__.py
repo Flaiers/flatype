@@ -7,9 +7,9 @@ from django.contrib import admin
 
 urlpatterns = main + core
 
-admin.site.site_header = "Flatype Admin"
-admin.site.site_title = "Flatype Admin"
-admin.site.index_title = "Welcome to flatype Admin Panel"
+admin.site.site_header = "Flatype"
+admin.site.site_title = "Flatype"
+admin.site.index_title = "Flatype admin panel"
 
 handler400 = "apps.core.exceptions.bad_request"
 handler403 = "apps.core.exceptions.permission_denied"

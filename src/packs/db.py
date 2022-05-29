@@ -23,7 +23,7 @@ def rename_tables() -> None:
 
     '''Edit db_table of LogEntry model'''
     LogEntry._meta.db_table = 'admin_logs'
-    LogEntry._meta.original_attrs['db_table'] = 'admin_log'
+    LogEntry._meta.original_attrs['db_table'] = 'admin_logs'
 
     '''Edit db_table of Session model'''
     Session._meta.db_table = 'sessions'
